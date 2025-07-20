@@ -1,7 +1,7 @@
-'use client';
+"use client";
 import React from "react";
 import Image from "next/image";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 export default function About() {
   const containerVariants = {
@@ -9,9 +9,9 @@ export default function About() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -20,46 +20,39 @@ export default function About() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6
-      }
-    }
+        duration: 0.6,
+      },
+    },
   };
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <motion.div initial="hidden" animate="visible" variants={containerVariants}>
       {/* Section 1: About The Author */}
-      <motion.section 
+      <motion.section
         variants={itemVariants}
         className="bg-gradient-to-b from-amber-700 to-amber-800 text-white px-6 py-12 md:py-20"
       >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-10 md:gap-16">
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex-shrink-0 w-56 md:w-64"
           >
-            <img
+            <Image
               alt="Author portrait photo"
-              className="w-full h-auto object-cover rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300"
               src="https://storage.googleapis.com/a1aa/image/86b2ec93-4455-493b-da70-d8ed9f7cad6b.jpg"
               width={256}
               height={256}
+              className="w-full h-auto object-cover rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300"
             />
           </motion.div>
-          <motion.div 
-            variants={itemVariants}
-            className="flex-1 max-w-4xl"
-          >
-            <motion.h2 
+          <motion.div variants={itemVariants} className="flex-1 max-w-4xl">
+            <motion.h2
               variants={itemVariants}
               className="text-2xl md:text-3xl font-bold mb-3"
             >
               About The Author
             </motion.h2>
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="flex items-center gap-2 mb-6"
             >
@@ -68,20 +61,20 @@ export default function About() {
               <div className="w-2 h-2 rounded-full bg-amber-400" />
               <div className="w-2 h-2 rounded-full bg-amber-400" />
             </motion.div>
-            <motion.p 
+            <motion.p
               variants={itemVariants}
               className="uppercase text-sm md:text-base font-semibold mb-4 leading-relaxed tracking-wide"
             >
               SENIOR ENGINEERING PROFESSIONAL, AUTHOR, TRAVELER, READER.
             </motion.p>
-            <motion.p 
+            <motion.p
               variants={itemVariants}
               className="text-base md:text-lg leading-relaxed mb-4"
             >
               Manoj Kumar Sharma was Senior Vice President [Business
               Development] at Electrosteel Castings Limited...
             </motion.p>
-            <motion.p 
+            <motion.p
               variants={itemVariants}
               className="text-base md:text-lg leading-relaxed"
             >
@@ -104,12 +97,12 @@ export default function About() {
       </motion.section>
 
       {/* Section 2: Awards and Literary Works */}
-      <motion.section 
+      <motion.section
         variants={itemVariants}
         className="px-6 py-12 md:py-20 max-w-7xl mx-auto bg-white"
       >
         <div className="flex flex-col md:flex-row md:items-center md:gap-12">
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="md:w-1/2 text-base md:text-lg leading-relaxed text-amber-900"
           >
@@ -129,46 +122,89 @@ export default function About() {
               cumque repudiandae similique animi.
             </motion.p>
           </motion.div>
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="md:w-1/2 mt-8 md:mt-0 flex justify-center md:justify-end"
           >
-            <img
+            {/* import Image from 'next/image'; */}
+            <Image
               alt="Award group photo"
-              className="shadow-xl rounded-lg max-w-full h-auto border-4 border-amber-500 hover:shadow-2xl transition-shadow duration-300"
               src="https://storage.googleapis.com/a1aa/image/fcf21ac4-3e40-40f5-60f6-f37c54754aba.jpg"
               width={500}
               height={325}
+              className="shadow-xl rounded-lg max-w-full h-auto border-4 border-amber-500 hover:shadow-2xl transition-shadow duration-300"
             />
           </motion.div>
         </div>
-        <motion.div 
-          variants={itemVariants}
-          className="mt-16 text-amber-900"
-        >
-          <motion.p variants={itemVariants} className="mb-6 text-lg md:text-xl font-semibold">
+        <motion.div variants={itemVariants} className="mt-16 text-amber-900">
+          <motion.p
+            variants={itemVariants}
+            className="mb-6 text-lg md:text-xl font-semibold"
+          >
             Sabarna has received the Most Iconic Author of the Year, 2022 from
             the Government of Punjab.
           </motion.p>
-          <motion.p variants={itemVariants} className="mb-4 text-lg md:text-xl font-semibold">
-            Manoj Kumar Sharma's literary works are:
+          <motion.p
+            variants={itemVariants}
+            className="mb-4 text-lg md:text-xl font-semibold"
+          >
+            Manoj Kumar Sharma&aposs literary works are:
           </motion.p>
-          <motion.ul variants={itemVariants} className="list-disc list-inside mb-8 text-base md:text-lg space-y-2">
-            <li>Pentacles Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloremque, commodi?</li>
-            <li>Frosted Glass Lorem ipsum dolor sit amet consectetur adipisicing elit. In, earum.</li>
-            <li>Abyss Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
-            <li>Winter Poems Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
-            <li>Random Subterranean Mosaic: 2012 – 2018 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
-            <li>Etchings of the First Quarter of 2020 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
-            <li>Fractured Mosaic Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
-            <li>A Marriage, an Affair, and a Friendship. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
-            <li>Tara and Sandy: Slow Dance of Infinite Stars Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
-            <li>Thirty Summer Poems and Conversations about a Murder Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, iste.</li>
+          <motion.ul
+            variants={itemVariants}
+            className="list-disc list-inside mb-8 text-base md:text-lg space-y-2"
+          >
+            <li>
+              Pentacles Lorem, ipsum dolor sit amet consectetur adipisicing
+              elit. Doloremque, commodi?
+            </li>
+            <li>
+              Frosted Glass Lorem ipsum dolor sit amet consectetur adipisicing
+              elit. In, earum.
+            </li>
+            <li>
+              Abyss Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Accusamus, iste.
+            </li>
+            <li>
+              Winter Poems Lorem, ipsum dolor sit amet consectetur adipisicing
+              elit. Accusamus, iste.
+            </li>
+            <li>
+              Random Subterranean Mosaic: 2012 – 2018 Lorem, ipsum dolor sit
+              amet consectetur adipisicing elit. Accusamus, iste.
+            </li>
+            <li>
+              Etchings of the First Quarter of 2020 Lorem, ipsum dolor sit amet
+              consectetur adipisicing elit. Accusamus, iste.
+            </li>
+            <li>
+              Fractured Mosaic Lorem, ipsum dolor sit amet consectetur
+              adipisicing elit. Accusamus, iste.
+            </li>
+            <li>
+              A Marriage, an Affair, and a Friendship. Lorem, ipsum dolor sit
+              amet consectetur adipisicing elit. Accusamus, iste.
+            </li>
+            <li>
+              Tara and Sandy: Slow Dance of Infinite Stars Lorem, ipsum dolor
+              sit amet consectetur adipisicing elit. Accusamus, iste.
+            </li>
+            <li>
+              Thirty Summer Poems and Conversations about a Murder Lorem, ipsum
+              dolor sit amet consectetur adipisicing elit. Accusamus, iste.
+            </li>
           </motion.ul>
-          <motion.p variants={itemVariants} className="mb-4 text-lg md:text-xl font-semibold">
-            Manoj Kumar Sharma's technical works are:
+          <motion.p
+            variants={itemVariants}
+            className="mb-4 text-lg md:text-xl font-semibold"
+          >
+            Manoj Kumar Sharma&aposs technical works are:
           </motion.p>
-          <motion.ul variants={itemVariants} className="list-disc list-inside text-base md:text-lg space-y-2">
+          <motion.ul
+            variants={itemVariants}
+            className="list-disc list-inside text-base md:text-lg space-y-2"
+          >
             <li>
               Articles on Ductile Iron Pipelines and Framework Agreement
               Methodology
@@ -182,18 +218,18 @@ export default function About() {
       </motion.section>
 
       {/* Section 3: Awards & Recognition */}
-      <motion.section 
+      <motion.section
         variants={itemVariants}
         className="bg-gradient-to-b from-amber-50 to-amber-100 py-12 md:py-20 px-6"
       >
         <div className="max-w-7xl mx-auto">
-          <motion.h3 
+          <motion.h3
             variants={itemVariants}
             className="text-center text-amber-900 font-bold text-2xl md:text-3xl mb-4"
           >
             AWARDS &amp; RECOGNITION
           </motion.h3>
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex justify-center mb-12"
           >
@@ -202,7 +238,7 @@ export default function About() {
             <div className="w-2 h-2 rounded-full bg-amber-500" />
             <div className="w-2 h-2 rounded-full bg-amber-500 ml-2" />
           </motion.div>
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8"
           >

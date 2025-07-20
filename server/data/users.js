@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
 
 // Sample users data - in a real app, this would come from a database
 let users = [
@@ -76,7 +76,7 @@ const createUser = (userData) => {
 const updateUser = (id, userData) => {
   const userIndex = users.findIndex(user => user.id === parseInt(id));
   if (userIndex === -1) return null;
-  
+
   users[userIndex] = {
     ...users[userIndex],
     ...userData,
@@ -88,12 +88,13 @@ const updateUser = (id, userData) => {
 const deleteUser = (id) => {
   const userIndex = users.findIndex(user => user.id === parseInt(id));
   if (userIndex === -1) return false;
-  
+
   users.splice(userIndex, 1);
   return true;
 };
 
-module.exports = {
+// ✅ Export all as named exports
+export {
   users,
   generateId,
   findUserById,
@@ -101,4 +102,4 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser
-}; 
+};
