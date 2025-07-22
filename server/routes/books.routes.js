@@ -8,7 +8,7 @@ import {
   updateBook,
   deleteBook,
   getBookStats
-} from '../controllers/book.controller.js';
+} from '../controllers/books.controller.js';
 
 const router = express.Router();
 

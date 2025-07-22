@@ -3,10 +3,10 @@ import cors from 'cors';
 import path from 'path';
 import config from 'dotenv';
 import authRoutes from './routes/auth.routes.js'
-import orderRoutes from './routes/order.routes.js'
+import orderRoutes from './routes/orders.routes.js'
 import userRoutes from './routes/user.routes.js'
 import cartRoutes from './routes/cart.routes.js'
-import bookRoutes from './routes/book.routes.js'
+import bookRoutes from './routes/books.routes.js'
 import connectToDatabase from './database/mongodb.js';
 
 
@@ -50,10 +50,9 @@ app.use('*', (req, res) => {
   });
 });
 
-// Connect to MongoDB before starting the server
-connectToDatabase();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/api/health`);
+  connectToDatabase();
 }); 

@@ -1,5 +1,5 @@
-import Order from '../models/order.model.js';
-import Book from '../models/book.model.js';
+import Order from '../models/orders.model.js';
+import Book from '../models/books.model.js';
 import mongoose from 'mongoose';
 
 // Create a new order
