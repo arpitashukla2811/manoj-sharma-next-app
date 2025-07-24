@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 import { FiBookOpen, FiUsers, FiTrendingUp, FiSettings, FiPlus, FiEdit, FiTrash2 } from 'react-icons/fi';
 import Link from 'next/link';
 import AdminLayout from '../components/AdminLayout';
+import ProtectedRoute from '../components/ProtectedRoute';
+import AdminProtectedRoute from '../components/AdminProtectedRoute';
+import { AdminAuthProvider } from '../components/AdminAuthContext';
 
 const AdminDashboard = () => {
   // Sample statistics - in a real app, these would come from an API
@@ -218,4 +221,12 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard; 
+export default function AdminPageWrapper() {
+  return (
+    <AdminAuthProvider>
+      <AdminProtectedRoute>
+        <AdminDashboard />
+      </AdminProtectedRoute>
+    </AdminAuthProvider>
+  );
+} 

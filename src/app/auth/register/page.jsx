@@ -5,6 +5,7 @@ import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft } from 'react-icon
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../components/AuthContext';
+import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const { register } = useAuth();
   const router = useRouter();
@@ -34,6 +36,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    setSuccess('');
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
@@ -51,10 +54,9 @@ export default function RegisterPage() {
 
     try {
       const result = await register(formData.name, formData.email, formData.password);
-      
       if (result.success) {
-        // Redirect to home page
-        router.push('/');
+        toast.success('Registration successful! Please log in.');
+        setTimeout(() => router.push('/auth/login'), 1200);
       } else {
         setError(result.error || 'Registration failed. Please try again.');
       }

@@ -1,22 +1,17 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from './AuthContext';
+import { useAdminAuth } from './AdminAuthContext';
 
-export default function ProtectedRoute({ children, adminOnly = false }) {
-  const { user, loading } = useAuth();
+export default function AdminProtectedRoute({ children }) {
+  const { admin, loading } = useAdminAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
-        router.push(`/auth/login?returnTo=${returnTo}`);
-      } else if (adminOnly && user.role !== 'admin') {
-        router.push('/auth/login');
-      }
+    if (!loading && !admin) {
+      router.replace('/admin/login');
     }
-  }, [user, loading, router, adminOnly]);
+  }, [admin, loading, router]);
 
   if (loading) {
     return (
@@ -29,7 +24,7 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
     );
   }
 
-  if (!user || (adminOnly && user.role !== 'admin')) {
+  if (!admin) {
     return null;
   }
 

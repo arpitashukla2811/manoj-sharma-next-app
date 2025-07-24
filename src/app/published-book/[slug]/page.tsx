@@ -4,95 +4,37 @@ import { motion } from 'framer-motion';
 import { FiStar, FiShoppingCart, FiExternalLink, FiArrowLeft } from 'react-icons/fi';
 import Link from 'next/link';
 import Image from 'next/image';
-
-// This would typically come from your database or API
-const products = [
-  {
-    title: "Pentacles",
-    description: "A collection of spiritual poems and reflections that will touch your soul and inspire your journey.",
-    year: "2023",
-    price: "$19.99",
-    rating: 5,
-    reviews: 128,
-    amazonLink: "https://www.amazon.com/pentacles",
-    fullDescription: "Pentacles is a profound exploration of spirituality through poetry. Each poem is crafted with care and insight, offering readers a journey through various aspects of human existence and spiritual growth. The collection combines traditional wisdom with contemporary perspectives, making it accessible to both spiritual seekers and poetry enthusiasts alike.",
-    author: "Manoj Kumar Sharma",
-    genre: "Poetry, Spirituality",
-    pages: 156,
-    language: "English",
-    isbn: "978-3-16-148410-0",
-    slug: "pentacles",
-    stock: 50,
-    format: "Hardcover",
-    dimensions: "6 x 9 inches",
-    weight: "1.2 lbs"
-  },
-  {
-    title: "Frosted Glass",
-    description: "A journey through life's most profound moments, captured in beautiful prose and poetry.",
-    year: "2022",
-    price: "$24.99",
-    rating: 5,
-    reviews: 95,
-    amazonLink: "https://www.amazon.com/frosted-glass",
-    fullDescription: "Frosted Glass presents a unique perspective on life's most significant moments. Through a blend of prose and poetry, the author captures the essence of human experience, from joy to sorrow, from triumph to defeat. The book's title metaphorically represents the way we view life - sometimes clear, sometimes obscured, but always beautiful in its own way.",
-    author: "Manoj Kumar Sharma",
-    genre: "Poetry, Prose",
-    pages: 184,
-    language: "English",
-    isbn: "978-3-16-148410-1",
-    slug: "frosted-glass",
-    stock: 35,
-    format: "Paperback",
-    dimensions: "5.5 x 8.5 inches",
-    weight: "0.8 lbs"
-  },
-  {
-    title: "Abyss",
-    description: "Exploring the depths of human consciousness and the mysteries of existence.",
-    year: "2021",
-    price: "$21.99",
-    rating: 5,
-    reviews: 156,
-    amazonLink: "https://www.amazon.com/abyss",
-    fullDescription: "Abyss delves into the profound depths of human consciousness and existence. This philosophical work combines poetry with deep insights into the nature of reality, consciousness, and the human experience. It challenges readers to question their perceptions and explore the mysteries that lie beneath the surface of everyday life.",
-    author: "Manoj Kumar Sharma",
-    genre: "Philosophy, Poetry",
-    pages: 212,
-    language: "English",
-    isbn: "978-3-16-148410-2",
-    slug: "abyss",
-    stock: 42,
-    format: "Hardcover",
-    dimensions: "6 x 9 inches",
-    weight: "1.1 lbs"
-  },
-  {
-    title: "Winter Poems",
-    description: "A seasonal collection of poetic masterpieces that will warm your heart.",
-    year: "2020",
-    price: "$18.99",
-    rating: 5,
-    reviews: 87,
-    amazonLink: "https://www.amazon.com/winter-poems",
-    fullDescription: "Winter Poems is a collection that captures the essence of winter in all its forms - from the physical cold to the metaphorical winters of the soul. Each poem is a masterpiece that combines vivid imagery with deep emotional resonance, creating a reading experience that is both beautiful and profound.",
-    author: "Manoj Kumar Sharma",
-    genre: "Poetry, Seasonal",
-    pages: 132,
-    language: "English",
-    isbn: "978-3-16-148410-3",
-    slug: "winter-poems",
-    stock: 28,
-    format: "Paperback",
-    dimensions: "5.5 x 8.5 inches",
-    weight: "0.7 lbs"
-  }
-];
+import { booksAPI } from '../../services/api';
 
 const ProductPage = ({ params }: { params: { slug: string } }) => {
-  const product = products.find(p => p.slug === params.slug);
+  const [product, setProduct] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [notFound, setNotFound] = React.useState(false);
 
-  if (!product) {
+  React.useEffect(() => {
+    setLoading(true);
+    setNotFound(false);
+    booksAPI.getBySlug(params.slug)
+      .then(res => {
+        if (res.data && res.data.success && res.data.data) {
+          setProduct(res.data.data);
+        } else {
+          setNotFound(true);
+        }
+      })
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
+  }, [params.slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-2xl font-bold text-amber-800">Loading...</h1>
+      </div>
+    );
+  }
+
+  if (notFound || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <h1 className="text-2xl font-bold text-amber-800">Product not found</h1>

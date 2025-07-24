@@ -40,12 +40,11 @@ const BooksAdmin = () => {
       try {
         const response = await booksAPI.delete(id);
         if (response.data.success) {
-          setBooks(books.filter(book => book.id !== id));
+          setBooks(books.filter(book => book._id !== id));
         } else {
           alert('Failed to delete book');
         }
       } catch (error) {
-        console.error('Error deleting book:', error);
         alert('Failed to delete book. Please try again.');
       }
     }
@@ -251,7 +250,7 @@ const BooksAdmin = () => {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            onClick={() => handleDelete(book.id)}
+                            onClick={() => handleDelete(book._id)}
                             className="text-red-600 hover:text-red-900 p-1"
                             title="Delete Book"
                           >

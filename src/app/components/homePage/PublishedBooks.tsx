@@ -25,10 +25,11 @@ const PublishedBooks = () => {
       setLoading(true);
       setError(null);
       const response = await booksAPI.getAll();
-      if (response.data.success) {
-        setBooks(response.data.data);
-      } else {
-        setError('Failed to fetch books');
+      // Defensive: ensure data is an array
+      const data = Array.isArray(response.data.data) ? response.data.data : [];
+      setBooks(data);
+      if (!Array.isArray(response.data.data)) {
+        console.error('Books API did not return an array:', response.data.data);
       }
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -63,7 +64,7 @@ const PublishedBooks = () => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      await addToCart(book);
+      await addToCart({ ...book, id: book._id });
     } catch (error) {
       console.error('Failed to add to cart:', error);
     }
@@ -127,14 +128,11 @@ const PublishedBooks = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {books.map((book, index) => (
-              <Link href={`/published-book/${book.slug}`} key={book.id}>
+            {(books || []).map((book, index) => (
+              <Link href={`/published-book/${book.slug}`} key={book._id}>
                 <motion.div
                   variants={itemVariants}
-                  whileHover={{ 
-                    y: -10,
-                    transition: { duration: 0.3 }
-                  }}
+                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
                   className="book-card group bg-white cursor-pointer"
                 >
                   <div className="book-image">
@@ -156,7 +154,6 @@ const PublishedBooks = () => {
                       </motion.div>
                     </motion.div>
                   </div>
-                  
                   <div className="book-content">
                     <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3 group-hover:text-[var(--saffron-primary)] transition-colors duration-300">
                       {book.title}
@@ -166,7 +163,7 @@ const PublishedBooks = () => {
                     </p>
                     <div className="flex items-center mb-4">
                       <div className="flex text-[var(--saffron-primary)]">
-                        {[...Array(book.rating || 5)].map((_, i) => (
+                        {[...Array(Math.round(book.rating || 5))].map((_, i) => (
                           <FiBookOpen key={i} className="w-4 h-4 fill-current" />
                         ))}
                       </div>
@@ -186,10 +183,10 @@ const PublishedBooks = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="btn-primary flex items-center space-x-2"
-                        onClick={(e) => handleAddToCart(e, book)}
+                        onClick={e => handleAddToCart(e, book)}
                       >
                         <FiShoppingCart className="w-5 h-5" />
-                        <span>{book.price}</span>
+                        <span>${book.price}</span>
                       </motion.button>
                     </div>
                   </div>
@@ -199,7 +196,6 @@ const PublishedBooks = () => {
           </div>
         )}
       </div>
-
       {selectedBook && (
         <BookDetailsModal
           isOpen={!!selectedBook}

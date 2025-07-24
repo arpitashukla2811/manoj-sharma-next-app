@@ -2,8 +2,8 @@ import User from '../models/user.model.js'; // Adjust path to your User model
 import jwt from 'jsonwebtoken';
 
 // Helper to generate JWT
-const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET || 'your-secret-key', {
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'your-secret-key', {
     expiresIn: '30d',
   });
 };
@@ -42,9 +42,8 @@ export const registerUser = async (req, res) => {
           _id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role,
         },
-        token: generateToken(user._id, user.role),
+        token: generateToken(user._id),
       });
     } else {
         res.status(400).json({ message: 'Invalid user data.' });
@@ -70,20 +69,20 @@ export const loginUser = async (req, res) => {
     // Check if user exists and if password matches using the model's method
     if (user && (await user.matchPassword(password))) {
       res.json({
+        success: true,
         message: 'Login successful.',
         user: {
           _id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role,
         },
-        token: generateToken(user._id, user.role),
+        token: generateToken(user._id),
       });
     } else {
-      res.status(401).json({ message: 'Invalid email or password.' });
+      res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 };
 

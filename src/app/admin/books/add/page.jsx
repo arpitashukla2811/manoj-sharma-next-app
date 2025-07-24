@@ -5,6 +5,7 @@ import { FiSave, FiArrowLeft, FiBookOpen } from 'react-icons/fi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AdminLayout from '../../../components/AdminLayout';
+import { booksAPI } from '../../../services/api';
 
 export default function AddBook() {
   const router = useRouter();
@@ -53,18 +54,15 @@ export default function AddBook() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, you would send this data to your API
-      console.log('Book data to save:', formData);
-      
-      // Redirect to books list
-      router.push('/admin/books');
+      const response = await booksAPI.create(formData);
+      if (response.data.success) {
+        router.push('/admin/books');
+      } else {
+        alert(response.data.message || 'Failed to add book');
+      }
     } catch (error) {
-      console.error('Error saving book:', error);
+      alert(error.response?.data?.message || 'Error saving book');
     } finally {
       setIsSubmitting(false);
     }

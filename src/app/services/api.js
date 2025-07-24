@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://localhost:5000/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -85,6 +85,12 @@ export const cartAPI = {
   clear: () => api.delete('/cart/clear'),
   getSummary: () => api.get('/cart/summary'),
   validate: () => api.post('/cart/validate'),
+};
+
+export const adminAPI = {
+  login: (credentials) => api.post('/admin/login', credentials),
+  getAll: () => api.get('/admin'),
+  getById: (id) => api.get(`/admin/${id}`),
 };
 
 export default api; 

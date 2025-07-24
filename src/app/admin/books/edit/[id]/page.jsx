@@ -5,6 +5,7 @@ import { FiSave, FiArrowLeft, FiBookOpen, FiTrash2 } from 'react-icons/fi';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import AdminLayout from '../../../../components/AdminLayout';
+import { booksAPI } from '../../../../services/api';
 
 export default function EditBook() {
   const router = useRouter();
@@ -124,27 +125,21 @@ export default function EditBook() {
   ];
 
   useEffect(() => {
-    // Simulate loading book data from API
     const loadBook = async () => {
       setIsLoading(true);
       try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const book = sampleBooks.find(b => b.id === parseInt(bookId));
-        if (book) {
-          setFormData(book);
+        const response = await booksAPI.getById(bookId);
+        if (response.data.success) {
+          setFormData(response.data.data);
         } else {
-          // Handle book not found
           router.push('/admin/books');
         }
       } catch (error) {
-        console.error('Error loading book:', error);
+        router.push('/admin/books');
       } finally {
         setIsLoading(false);
       }
     };
-
     if (bookId) {
       loadBook();
     }
@@ -172,18 +167,15 @@ export default function EditBook() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, you would send this data to your API
-      console.log('Updated book data:', formData);
-      
-      // Redirect to books list
-      router.push('/admin/books');
+      const response = await booksAPI.update(bookId, formData);
+      if (response.data.success) {
+        router.push('/admin/books');
+      } else {
+        alert(response.data.message || 'Failed to update book');
+      }
     } catch (error) {
-      console.error('Error updating book:', error);
+      alert(error.response?.data?.message || 'Error updating book');
     } finally {
       setIsSubmitting(false);
     }

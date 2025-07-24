@@ -7,7 +7,7 @@ import {
   updateOrderStatus,
   getAllOrders,
   getOrderStats
-} from '../controllers/order.controller.js';
+} from '../controllers/orders.controller.js';
 
 const router = express.Router();
 

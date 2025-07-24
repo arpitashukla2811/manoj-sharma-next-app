@@ -74,7 +74,7 @@ const Header = () => {
                 )}
               </motion.button>
 
-              {/* User Menu */}
+              {/* User Icon or Auth Buttons */}
               {user ? (
                 <div className="relative">
                   <motion.button
@@ -82,14 +82,15 @@ const Header = () => {
                     className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                   >
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <span className="hidden sm:block text-sm font-medium text-gray-700">
-                      {user.name}
-                    </span>
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={user.name}
+                        className="w-8 h-8 rounded-full"
+                      />
+                    ) : (
+                      <FiUser className="w-7 h-7 text-gray-700" />
+                    )}
                   </motion.button>
 
                   {/* Dropdown Menu */}
@@ -97,7 +98,7 @@ const Header = () => {
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2"
+                      className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
                     >
                       <div className="px-4 py-2 border-b border-gray-100">
                         <p className="text-sm font-medium text-gray-900">{user.name}</p>
@@ -129,26 +130,20 @@ const Header = () => {
                   )}
                 </div>
               ) : (
-                <div className="flex items-center space-x-2">
-                  <Link href="/auth/login">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors"
-                    >
-                      Login
-                    </motion.button>
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors"
+                  >
+                    Login
                   </Link>
-                  <Link href="/auth/register">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors"
-                    >
-                      Sign Up
-                    </motion.button>
+                  <Link
+                    href="/auth/register"
+                    className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 transition-colors"
+                  >
+                    Sign Up
                   </Link>
-                </div>
+                </>
               )}
 
               {/* Mobile menu button */}

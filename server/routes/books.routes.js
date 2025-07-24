@@ -8,18 +8,18 @@ import {
   updateBook,
   deleteBook,
   getBookStats
-} from '../controllers/book.controller.js';
+} from '../controllers/books.controller.js';
 
 const router = express.Router();
 
 // Get all books (public)
 router.get('/', getBooks);
 
-// Get book by ID (public)
-router.get('/:id', getBookById);
-
 // Get book by slug (public)
 router.get('/slug/:slug', getBookBySlug);
+
+// Get book by ID (public)
+router.get('/:id', getBookById);
 
 // Create new book (admin only)
 router.post('/', adminAuth, createBook);

@@ -1,8 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiBookOpen, FiCalendar, FiShoppingCart } from 'react-icons/fi';
 import Link from 'next/link';
+import { booksAPI } from '../services/api';
 
 const PublishedBookPage = () => {
   const containerVariants = {
@@ -26,52 +27,51 @@ const PublishedBookPage = () => {
     }
   };
 
-  const books = [
-    {
-      title: "Pentacles",
-      description: "A collection of spiritual poems and reflections that will touch your soul and inspire your journey.",
-      year: "2023",
-      price: "$19.99",
-      rating: 5,
-      reviews: 128,
-      slug: "pentacles",
-      stock: 50,
-      format: "Hardcover"
-    },
-    {
-      title: "Frosted Glass",
-      description: "A journey through life's most profound moments, captured in beautiful prose and poetry.",
-      year: "2022",
-      price: "$24.99",
-      rating: 5,
-      reviews: 95,
-      slug: "frosted-glass",
-      stock: 35,
-      format: "Paperback"
-    },
-    {
-      title: "Abyss",
-      description: "Exploring the depths of human consciousness and the mysteries of existence.",
-      year: "2021",
-      price: "$21.99",
-      rating: 5,
-      reviews: 156,
-      slug: "abyss",
-      stock: 42,
-      format: "Hardcover"
-    },
-    {
-      title: "Winter Poems",
-      description: "A seasonal collection of poetic masterpieces that will warm your heart.",
-      year: "2020",
-      price: "$18.99",
-      rating: 5,
-      reviews: 87,
-      slug: "winter-poems",
-      stock: 28,
-      format: "Paperback"
-    }
-  ];
+  const [books, setBooks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await booksAPI.getAll();
+        const data = Array.isArray(response.data.data) ? response.data.data : [];
+        setBooks(data);
+        if (!Array.isArray(response.data.data)) {
+          console.error('Books API did not return an array:', response.data.data);
+        }
+      } catch (error) {
+        setError('Failed to load books. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background-light)]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--saffron-primary)] mx-auto"></div>
+          <p className="mt-4 text-[var(--text-secondary)]">Loading books...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background-light)]">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button onClick={() => window.location.reload()} className="btn-primary">Try Again</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background-light)] py-12">
@@ -96,8 +96,8 @@ const PublishedBookPage = () => {
           animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto"
         >
-          {books.map((book) => (
-            <Link href={`/published-book/${book.slug}`} key={book.title}>
+          {(books || []).map((book) => (
+            <Link href={`/published-book/${book.slug}`} key={book._id}>
               <motion.div
                 variants={itemVariants}
                 whileHover={{ 
@@ -134,12 +134,12 @@ const PublishedBookPage = () => {
                   </p>
                   <div className="flex items-center mb-4">
                     <div className="flex text-[var(--saffron-primary)]">
-                      {[...Array(book.rating)].map((_, i) => (
+                      {[...Array(Math.round(book.rating || 5))].map((_, i) => (
                         <FiBookOpen key={i} className="w-4 h-4 fill-current" />
                       ))}
                     </div>
                     <span className="text-sm text-[var(--text-secondary)] ml-2">
-                      ({book.reviews} reviews)
+                      ({book.reviews || 0} reviews)
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -161,7 +161,7 @@ const PublishedBookPage = () => {
                       }}
                     >
                       <FiShoppingCart className="w-5 h-5" />
-                      <span>{book.price}</span>
+                      <span>${book.price}</span>
                     </motion.button>
                   </div>
                 </div>

@@ -53,7 +53,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      const response = await cartAPI.addItem(book.id, quantity);
+      const response = await cartAPI.addItem(book._id || book.id, quantity);
       if (response.data.success) {
         setCart(response.data.data);
       }
