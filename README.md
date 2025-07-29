@@ -1,242 +1,343 @@
-# Manoj Kumar Sharma - Author & Poet Website
+# 📚 Manoj Sharma E-Commerce System
 
-A modern, responsive website for author Manoj Kumar Sharma featuring his published books, admin interface, and e-commerce functionality.
+A full-stack e-commerce platform built with Next.js, Node.js, and MongoDB, featuring comprehensive book management, user authentication, and admin functionality.
 
-## Features
+## 🚀 Live Demo
 
-### Frontend (Next.js)
-- **Modern UI/UX**: Beautiful, responsive design with smooth animations
-- **Book Showcase**: Display published books with detailed information
-- **Admin Interface**: Complete CRUD operations for book management
-- **User Authentication**: Login, registration, and profile management
-- **Shopping Cart**: Add, remove, and manage cart items
-- **Checkout System**: Multi-step checkout process
-- **Order Management**: View order history and track orders
-- **Responsive Design**: Works perfectly on all devices
+- **Frontend**: [Your Frontend URL]
+- **Backend API**: [Your Backend URL]
+- **Admin Panel**: [Your Admin URL]
 
-### Backend (Express.js)
-- **RESTful API**: Complete backend API for all frontend functionality
-- **Authentication**: JWT-based authentication with role-based access
-- **Book Management**: CRUD operations for books with search and filtering
-- **User Management**: User registration, login, and profile management
-- **Order Processing**: Order creation, status updates, and tracking
-- **Cart Management**: Shopping cart functionality with validation
-- **Admin Features**: Admin-only endpoints for managing books and users
+## ✨ Features
 
-## Tech Stack
+### 🔐 Authentication & Security
+- **JWT-based authentication** with role-based access control
+- **User roles**: Customer, Admin, Moderator
+- **Session management** with automatic token refresh
+- **Account lockout protection** after failed login attempts
+- **Password reset functionality** with email verification
+- **CSRF protection** and rate limiting
+
+### 📁 File Upload System
+- **Multer integration** for secure file uploads
+- **Image validation** (JPG, PNG, GIF, WebP)
+- **Multiple file upload** support
+- **Automatic file cleanup** and organization
+- **Cloud storage ready** (AWS S3, Cloudinary)
+
+### 🛒 E-Commerce Features
+- **Product catalog** with advanced filtering and search
+- **Shopping cart** with persistent storage
+- **Order management** with status tracking
+- **User profiles** with order history
+- **Admin dashboard** with analytics
+- **Inventory management** with stock tracking
+
+### 🎨 Enhanced Features
+- **Pagination** and advanced search functionality
+- **Featured products** and best sellers
+- **Sale/discount system** with percentage calculations
+- **Product ratings** and reviews system
+- **SEO optimization** with meta tags
+- **Responsive design** for all devices
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- **Next.js 15** - React framework
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Framer Motion** - Animations
-- **React Icons** - Icon library
+- **Next.js 15** - React framework with TypeScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **Axios** - HTTP client for API calls
+- **React Hot Toast** - Notification system
 
 ### Backend
-- **Express.js** - Node.js web framework
-- **JWT** - Authentication
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web application framework
+- **MongoDB** - NoSQL database
+- **Mongoose** - MongoDB object modeling
+- **JWT** - JSON Web Tokens for authentication
+- **Multer** - File upload middleware
 - **bcryptjs** - Password hashing
-- **CORS** - Cross-origin resource sharing
-- **Multer** - File upload handling
 
-## Getting Started
+### Development Tools
+- **ESLint** - Code linting
+- **TypeScript** - Type safety
+- **Nodemon** - Development server
+- **Git** - Version control
 
-### Prerequisites
-- Node.js (v18 or higher)
-- npm or yarn
+## 📋 Prerequisites
 
-### Installation
+Before running this application, make sure you have:
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd manoj-sharma-next
-   ```
+- **Node.js** (v18 or higher)
+- **MongoDB** (v6 or higher) or MongoDB Atlas account
+- **npm** or **yarn** package manager
+- **Git** for version control
 
-2. **Install dependencies**
-   ```bash
-   # Install frontend dependencies
-   npm install
+## 🚀 Quick Start
 
-   # Install backend dependencies (if not already installed)
-   npm install
-   ```
+### 1. Clone the Repository
 
-3. **Environment Setup**
-   ```bash
-   # Create .env file for backend
-   cp server/.env.example server/.env
-   # Edit server/.env with your configuration
-   ```
+```bash
+git clone <your-repository-url>
+cd manoj-sharma-next
+```
 
-4. **Run the Development Servers**
+### 2. Install Dependencies
 
-   **Option 1: Run both frontend and backend**
-   ```bash
-   # Terminal 1 - Frontend (Next.js)
-   npm run dev
+```bash
+npm install
+```
 
-   # Terminal 2 - Backend (Express.js)
-   npm run dev:server
-   ```
+### 3. Environment Setup
 
-   **Option 2: Run only frontend (with mock data)**
-   ```bash
-   npm run dev
-   ```
+Create a `.env.local` file in the root directory:
 
-   **Option 3: Run only backend**
-   ```bash
-   npm run server
-   ```
+```env
+# Database Configuration
+MONGODB_URI=mongodb://localhost:27017/manoj-sharma-ecommerce
+# or for MongoDB Atlas:
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database
 
-### Access Points
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-here
+JWT_EXPIRES_IN=7d
+
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:3000
+
+# Optional: Email Service
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+```
+
+### 4. Start Development Servers
+
+```bash
+# Terminal 1: Start backend server
+npm run dev:server
+
+# Terminal 2: Start frontend development server
+npm run dev
+```
+
+### 5. Access the Application
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:5000
 - **API Health Check**: http://localhost:5000/api/health
+- **API Documentation**: http://localhost:5000/api/docs
 
-## API Endpoints
+### 6. Default Admin Credentials
+
+- **Email**: admin@example.com
+- **Password**: Admin@123
+
+## 📁 Project Structure
+
+```
+manoj-sharma-next/
+├── src/                          # Frontend source code
+│   ├── app/                      # Next.js app directory
+│   │   ├── admin/               # Admin panel pages
+│   │   ├── auth/                # Authentication pages
+│   │   ├── components/          # Reusable components
+│   │   ├── services/            # API services
+│   │   └── ...
+│   └── ...
+├── server/                       # Backend source code
+│   ├── config/                  # Configuration files
+│   │   ├── env.js              # Environment configuration
+│   │   └── multer.js           # File upload configuration
+│   ├── controllers/             # Route controllers
+│   ├── middleware/              # Custom middleware
+│   ├── models/                  # Database models
+│   ├── routes/                  # API routes
+│   └── index.js                 # Server entry point
+├── uploads/                      # File upload directory
+├── public/                       # Static assets
+├── package.json                  # Dependencies and scripts
+└── README.md                     # Project documentation
+```
+
+## 🔧 Available Scripts
+
+```bash
+# Development
+npm run dev              # Start frontend development server
+npm run dev:server       # Start backend development server
+npm run build            # Build frontend for production
+npm run start            # Start production server
+
+# Linting and Formatting
+npm run lint             # Run ESLint
+npm run lint:fix         # Fix ESLint errors
+
+# Database
+npm run db:seed          # Seed database with sample data
+npm run db:reset         # Reset database (development only)
+```
+
+## 🌐 API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user profile
-- `PUT /api/auth/profile` - Update user profile
-- `PUT /api/auth/change-password` - Change password
+- `POST /api/v1/auth/register` - User registration
+- `POST /api/v1/auth/login` - User login
+- `GET /api/v1/auth/me` - Get user profile
+- `POST /api/v1/admin/login` - Admin login
 
 ### Books
-- `GET /api/books` - Get all books (with search/filter)
-- `GET /api/books/:id` - Get book by ID
-- `GET /api/books/slug/:slug` - Get book by slug
-- `POST /api/books` - Create new book (admin only)
-- `PUT /api/books/:id` - Update book (admin only)
-- `DELETE /api/books/:id` - Delete book (admin only)
-- `GET /api/books/admin/stats` - Get book statistics (admin only)
+- `GET /api/v1/books` - Get all books with filters
+- `GET /api/v1/books/featured` - Get featured books
+- `GET /api/v1/books/bestsellers` - Get best sellers
+- `GET /api/v1/books/new-releases` - Get new releases
+- `GET /api/v1/books/on-sale` - Get books on sale
+- `GET /api/v1/books/:id` - Get book by ID
+- `GET /api/v1/books/slug/:slug` - Get book by slug
 
-### Users
-- `GET /api/users` - Get all users (admin only)
-- `GET /api/users/:id` - Get user by ID (admin only)
-- `POST /api/users` - Create new user (admin only)
-- `PUT /api/users/:id` - Update user (admin only)
-- `DELETE /api/users/:id` - Delete user (admin only)
-- `GET /api/users/admin/stats` - Get user statistics (admin only)
+### File Upload
+- `POST /api/v1/upload/single` - Upload single image
+- `POST /api/v1/upload/multiple` - Upload multiple images
+- `POST /api/v1/upload/book-images` - Upload book images
+- `DELETE /api/v1/upload/files/:filename` - Delete file
 
-### Orders
-- `GET /api/orders/my-orders` - Get user's orders
-- `GET /api/orders/:id` - Get order by ID
-- `POST /api/orders` - Create new order
-- `PUT /api/orders/:id/status` - Update order status (admin only)
-- `GET /api/orders/admin/all` - Get all orders (admin only)
-- `GET /api/orders/admin/stats` - Get order statistics (admin only)
+### Cart & Orders
+- `GET /api/v1/cart` - Get user cart
+- `POST /api/v1/cart/add` - Add item to cart
+- `PUT /api/v1/cart/update` - Update cart item
+- `DELETE /api/v1/cart/remove/:id` - Remove item from cart
+- `POST /api/v1/orders` - Create order
+- `GET /api/v1/orders` - Get user orders
 
-### Cart
-- `GET /api/cart` - Get user's cart
-- `POST /api/cart/add` - Add item to cart
-- `PUT /api/cart/update/:bookId` - Update cart item quantity
-- `DELETE /api/cart/remove/:bookId` - Remove item from cart
-- `DELETE /api/cart/clear` - Clear cart
-- `GET /api/cart/summary` - Get cart summary
-- `POST /api/cart/validate` - Validate cart items
+### Admin (Protected)
+- `GET /api/v1/admin/dashboard` - Admin dashboard
+- `GET /api/v1/admin/stats` - System statistics
+- `GET /api/v1/admin/users` - Get all users
+- `GET /api/v1/admin/orders` - Get all orders
 
-## Sample Data
+## 🔒 Security Features
 
-### Default Admin User
-- **Email**: admin@example.com
-- **Password**: admin123
-- **Role**: admin
+- **JWT Authentication** with secure token handling
+- **Role-based Access Control** (RBAC)
+- **Rate Limiting** to prevent abuse
+- **Input Validation** and sanitization
+- **CORS Configuration** for cross-origin requests
+- **File Upload Security** with type and size validation
+- **Password Hashing** with bcrypt
+- **Account Lockout** after failed attempts
 
-### Default Regular Users
-- **Email**: john@example.com
-- **Password**: password123
-- **Email**: jane@example.com
-- **Password**: password123
+## 📊 Database Schema
 
-## Project Structure
-
-```
-├── src/
-│   ├── app/                    # Next.js app directory
-│   │   ├── components/         # React components
-│   │   ├── admin/             # Admin pages
-│   │   ├── auth/              # Authentication pages
-│   │   ├── checkout/          # Checkout pages
-│   │   ├── profile/           # User profile pages
-│   │   └── published-book/    # Book showcase pages
-│   └── ...
-├── server/                    # Express.js backend
-│   ├── data/                  # Sample data files
-│   ├── middleware/            # Express middleware
-│   ├── routes/                # API routes
-│   └── index.js               # Server entry point
-├── package.json
-└── README.md
+### User Model
+```javascript
+{
+  name: String,
+  email: String (unique),
+  password: String (hashed),
+  role: String (enum: ['user', 'admin', 'moderator']),
+  avatar: String,
+  phone: String,
+  address: Object,
+  isEmailVerified: Boolean,
+  loginAttempts: Number,
+  lockUntil: Date,
+  isActive: Boolean,
+  preferences: Object
+}
 ```
 
-## Features in Detail
+### Book Model
+```javascript
+{
+  title: String,
+  slug: String (unique),
+  description: String,
+  fullDescription: String,
+  author: String,
+  price: Number,
+  originalPrice: Number,
+  discountPercentage: Number,
+  rating: Number,
+  reviews: Number,
+  coverImage: String,
+  galleryImages: [String],
+  stock: Number,
+  isFeatured: Boolean,
+  isBestSeller: Boolean,
+  isNewRelease: Boolean,
+  isOnSale: Boolean,
+  status: String (enum: ['draft', 'published', 'archived']),
+  views: Number,
+  sales: Number
+}
+```
 
-### Admin Interface
-- **Dashboard**: Overview with statistics and quick actions
-- **Book Management**: Add, edit, delete, and view all books
-- **User Management**: Manage user accounts and roles
-- **Order Management**: View and update order statuses
-- **Analytics**: View sales and user statistics
+## 🚀 Deployment
 
-### User Features
-- **Browse Books**: View all published books with search and filtering
-- **Book Details**: Detailed view of each book with purchase options
-- **Shopping Cart**: Add books to cart and manage quantities
-- **Checkout**: Complete purchase process with shipping and payment
-- **Order History**: View past orders and track current orders
-- **Profile Management**: Update personal information and preferences
+### Frontend Deployment (Vercel)
+1. Connect your repository to Vercel
+2. Set environment variables:
+   - `NEXT_PUBLIC_API_URL`: Your backend URL
+3. Deploy automatically on push
 
-### Security Features
-- **JWT Authentication**: Secure token-based authentication
-- **Role-based Access**: Admin and user role permissions
-- **Password Hashing**: Secure password storage with bcrypt
-- **Input Validation**: Comprehensive validation on all endpoints
-- **CORS Protection**: Cross-origin request handling
+### Backend Deployment (Railway/Render)
+1. Connect your repository
+2. Set environment variables:
+   - `MONGODB_URI`: Your MongoDB connection string
+   - `JWT_SECRET`: Your JWT secret
+   - `FRONTEND_URL`: Your frontend URL
+3. Set root directory to `server/`
 
-## Development
+For detailed deployment instructions, see [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
 
-### Adding New Features
-1. Create frontend components in `src/app/components/`
-2. Add corresponding API endpoints in `server/routes/`
-3. Update data models in `server/data/` if needed
-4. Test both frontend and backend functionality
-
-### Database Integration
-The current implementation uses in-memory data storage. To integrate with a real database:
-
-1. Install database driver (e.g., `pg` for PostgreSQL)
-2. Update data files to use database queries
-3. Add database connection configuration
-4. Implement proper error handling and transactions
-
-## Deployment
-
-### Frontend Deployment
-- Deploy to Vercel, Netlify, or any static hosting service
-- Update API base URL in frontend configuration
-
-### Backend Deployment
-- Deploy to Heroku, Railway, or any Node.js hosting service
-- Set environment variables for production
-- Configure database connection
-- Set up proper CORS settings
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+## 📝 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
+## 🆘 Support
 
-For support or questions, please contact the development team.
+If you encounter any issues or have questions:
+
+1. Check the [troubleshooting section](./DEPLOYMENT_GUIDE.md#troubleshooting)
+2. Review the [API documentation](http://localhost:5000/api/docs)
+3. Check server logs for error messages
+4. Verify environment variables are set correctly
+
+## 🎯 Roadmap
+
+- [ ] Email notification system
+- [ ] Payment gateway integration (Stripe/PayPal)
+- [ ] Advanced analytics dashboard
+- [ ] Multi-language support
+- [ ] Mobile app (React Native)
+- [ ] Advanced search with filters
+- [ ] Wishlist functionality
+- [ ] Social media integration
+- [ ] Advanced SEO features
+- [ ] Performance optimization
+
+## 🙏 Acknowledgments
+
+- Next.js team for the amazing framework
+- MongoDB team for the database
+- All contributors and supporters
+
+---
+
+**Built with ❤️ by Manoj Sharma**
+
+For more information, visit: [Your Website]

@@ -1,9 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { adminAPI } from '../../services/api';
+import { adminAPI } from '@/services/api';
 import Link from 'next/link';
+import { AdminAuthProvider } from '../../components/AdminAuthContext';
+import AdminProtectedRoute from '../../components/AdminProtectedRoute';
 
-export default function AdminsListPage() {
+function AdminsListPage() {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -42,5 +44,15 @@ export default function AdminsListPage() {
         ))}
       </ul>
     </div>
+  );
+}
+
+export default function AdminsListPageWrapper() {
+  return (
+    <AdminAuthProvider>
+      <AdminProtectedRoute>
+        <AdminsListPage />
+      </AdminProtectedRoute>
+    </AdminAuthProvider>
   );
 } 

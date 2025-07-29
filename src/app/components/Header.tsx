@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FiMenu, FiX, FiShoppingCart, FiUser, FiLogOut } from 'react-icons/fi';
+import { FiMenu, FiX, FiShoppingCart, FiUser, FiLogOut, FiPackage } from 'react-icons/fi';
 import { useAuth } from './AuthContext';
 import { useCart } from './CartContext';
 import CartSidebar from './CartSidebar';
@@ -117,6 +117,7 @@ const Header = () => {
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setIsMenuOpen(false)}
                       >
+                        <FiPackage className="inline w-4 h-4 mr-2" />
                         My Orders
                       </Link>
                       <button
@@ -179,7 +180,26 @@ const Header = () => {
                     {item.name}
                   </Link>
                 ))}
-                {!user && (
+                {user ? (
+                  <>
+                    <Link
+                      href="/profile"
+                      className="block px-3 py-2 text-gray-700 hover:text-amber-600 text-sm font-medium transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <FiUser className="inline w-4 h-4 mr-2" />
+                      Profile
+                    </Link>
+                    <Link
+                      href="/orders"
+                      className="block px-3 py-2 text-gray-700 hover:text-amber-600 text-sm font-medium transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <FiPackage className="inline w-4 h-4 mr-2" />
+                      My Orders
+                    </Link>
+                  </>
+                ) : (
                   <>
                     <Link
                       href="/auth/login"

@@ -4,9 +4,10 @@ import { motion } from 'framer-motion';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft } from 'react-icons/fi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { adminAPI } from '../../services/api';
+import { useAdminAuth } from '../../components/AdminAuthContext';
+import { AdminAuthProvider } from '../../components/AdminAuthContext';
 
-export default function AdminLoginPage() {
+function AdminLoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -15,8 +16,16 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [admin, setAdmin] = useState(null);
+  
+  const { login, admin } = useAdminAuth();
   const router = useRouter();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (admin) {
+      router.replace('/admin');
+    }
+  }, [admin, router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,29 +38,33 @@ export default function AdminLoginPage() {
     setIsLoading(true);
     setError('');
     setSuccess('');
-    setAdmin(null);
+
     try {
-      const response = await adminAPI.login(formData);
-      if (response.data && response.data.token) {
+      const response = await fetch('http://localhost:5000/api/v1/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
         setSuccess('Login successful! Redirecting...');
-        setAdmin(response.data.admin);
-        localStorage.setItem('admin', JSON.stringify(response.data.admin));
-        localStorage.setItem('adminToken', response.data.token);
+        await login(data.admin, data.token);
+        setTimeout(() => {
+          router.replace('/admin');
+        }, 1000);
       } else {
-        setError(response.data?.message || 'Login failed. Please try again.');
+        setError(data.message || 'Login failed. Please try again.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (success && admin) {
-      router.replace('/admin');
-    }
-  }, [success, admin, router]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -171,5 +184,13 @@ export default function AdminLoginPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPageWrapper() {
+  return (
+    <AdminAuthProvider>
+      <AdminLoginPage />
+    </AdminAuthProvider>
   );
 } 

@@ -1,70 +1,91 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiPlus, FiEdit, FiTrash2, FiSearch, FiFilter, FiEye } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiEye, FiTruck, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import Link from 'next/link';
 import AdminLayout from '../../components/AdminLayout';
-import { booksAPI } from '@/services/api';
+import { ordersAPI } from '@/services/api';
 import { AdminAuthProvider } from '../../components/AdminAuthContext';
 import AdminProtectedRoute from '../../components/AdminProtectedRoute';
 
-function BooksManagement() {
-  const [books, setBooks] = useState([]);
+function OrdersManagement() {
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [deletingBook, setDeletingBook] = useState(null);
+  const [updatingOrder, setUpdatingOrder] = useState(null);
 
   useEffect(() => {
-    fetchBooks();
-  }, [currentPage, searchTerm]);
+    fetchOrders();
+  }, [currentPage, searchTerm, filterStatus]);
 
-  const fetchBooks = async () => {
+  const fetchOrders = async () => {
     try {
       setLoading(true);
       const params = {
         page: currentPage,
         limit: 10,
-        search: searchTerm || undefined
+        search: searchTerm || undefined,
+        status: filterStatus === 'all' ? undefined : filterStatus
       };
 
-      const response = await booksAPI.getAll(params);
+      const response = await ordersAPI.getAll(params);
       const { data, pagination } = response.data;
       
-      setBooks(data || []);
+      setOrders(data || []);
       setTotalPages(pagination?.totalPages || 1);
     } catch (error) {
-      console.error('Error fetching books:', error);
+      console.error('Error fetching orders:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteBook = async (bookId) => {
-    if (!confirm('Are you sure you want to delete this book?')) {
-      return;
-    }
-
+  const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      setDeletingBook(bookId);
-      await booksAPI.delete(bookId);
-      fetchBooks(); // Refresh the list
+      setUpdatingOrder(orderId);
+      await ordersAPI.updateStatus(orderId, newStatus);
+      fetchOrders(); // Refresh the list
     } catch (error) {
-      console.error('Error deleting book:', error);
-      alert('Failed to delete book. Please try again.');
+      console.error('Error updating order status:', error);
+      alert('Failed to update order status. Please try again.');
     } finally {
-      setDeletingBook(null);
+      setUpdatingOrder(null);
     }
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
     setCurrentPage(1);
-    fetchBooks();
+    fetchOrders();
   };
 
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      'Pending': { color: 'bg-yellow-100 text-yellow-800', icon: FiXCircle },
+      'Processing': { color: 'bg-blue-100 text-blue-800', icon: FiTruck },
+      'Shipped': { color: 'bg-purple-100 text-purple-800', icon: FiTruck },
+      'Delivered': { color: 'bg-green-100 text-green-800', icon: FiCheckCircle },
+      'Cancelled': { color: 'bg-red-100 text-red-800', icon: FiXCircle }
+    };
 
+    const config = statusConfig[status] || statusConfig['Pending'];
+    const Icon = config.icon;
+    
+    return (
+      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${config.color}`}>
+        <Icon className="w-3 h-3 mr-1" />
+        {status}
+      </span>
+    );
+  };
+
+  const getStatusOptions = (currentStatus) => {
+    const allStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+    return allStatuses.filter(status => status !== currentStatus);
+  };
 
   if (loading) {
     return (
@@ -72,7 +93,7 @@ function BooksManagement() {
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading books...</p>
+            <p className="text-gray-600">Loading orders...</p>
           </div>
         </div>
       </AdminLayout>
@@ -89,21 +110,9 @@ function BooksManagement() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Books Management</h1>
-                <p className="mt-2 text-gray-600">Manage all books in your store</p>
-              </div>
-              <Link href="/admin/books/add">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
-                >
-                  <FiPlus className="w-5 h-5" />
-                  Add New Book
-                </motion.button>
-              </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Orders Management</h1>
+              <p className="mt-2 text-gray-600">View and manage customer orders</p>
             </div>
           </motion.div>
 
@@ -123,16 +132,30 @@ function BooksManagement() {
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search books by title, author, or description..."
+                    placeholder="Search orders by ID, customer name, or email..."
                     className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   />
                 </div>
               </form>
-
+              <div className="flex items-center gap-2">
+                <FiFilter className="w-5 h-5 text-gray-400" />
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                >
+                  <option value="all">All Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Processing">Processing</option>
+                  <option value="Shipped">Shipped</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
             </div>
           </motion.div>
 
-          {/* Books Table */}
+          {/* Orders Table */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -143,101 +166,98 @@ function BooksManagement() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Book
+                      Order Details
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Author
+                      Customer
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Price
+                      Items
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Stock
+                      Total
                     </th>
-
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {books.length > 0 ? (
-                    books.map((book) => (
+                  {orders.length > 0 ? (
+                    orders.map((order) => (
                       <motion.tr
-                        key={book._id}
+                        key={order._id}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="hover:bg-gray-50"
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-12 w-12">
-                              <img
-                                className="h-12 w-12 rounded-lg object-cover"
-                                src={book.coverImage || '/images/books/book1.jpeg'}
-                                alt={book.title}
-                              />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
-                                {book.title}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {book.year} • {book.format}
-                              </div>
-                            </div>
+                          <div className="text-sm font-medium text-gray-900">
+                            #{order._id.slice(-8).toUpperCase()}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {order.paymentMethod}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {order.user?.name || 'N/A'}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {order.user?.email || 'N/A'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {order.items?.length || 0} items
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {order.items?.map(item => item.title).join(', ')}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {book.author}
+                          ${order.total?.toFixed(2) || '0.00'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          ${book.price?.toFixed(2) || '0.00'}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {getStatusBadge(order.status)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            book.stock > 10 ? 'bg-green-100 text-green-800' :
-                            book.stock > 0 ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {book.stock || 0}
-                          </span>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {new Date(order.createdAt).toLocaleDateString()}
                         </td>
-
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex items-center space-x-2">
-                            <Link href={`/published-book/${book.slug}`}>
+                            <Link href={`/admin/orders/${order._id}`}>
                               <button className="text-blue-600 hover:text-blue-900">
                                 <FiEye className="w-4 h-4" />
                               </button>
                             </Link>
-                            <Link href={`/admin/books/edit/${book._id}`}>
-                              <button className="text-indigo-600 hover:text-indigo-900">
-                                <FiEdit className="w-4 h-4" />
-                              </button>
-                            </Link>
-                            <button
-                              onClick={() => handleDeleteBook(book._id)}
-                              disabled={deletingBook === book._id}
-                              className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                            <select
+                              value={order.status}
+                              onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
+                              disabled={updatingOrder === order._id}
+                              className="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                             >
-                              <FiTrash2 className="w-4 h-4" />
-                            </button>
+                              <option value={order.status}>{order.status}</option>
+                              {getStatusOptions(order.status).map(status => (
+                                <option key={status} value={status}>{status}</option>
+                              ))}
+                            </select>
                           </div>
                         </td>
                       </motion.tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" className="px-6 py-12 text-center">
+                      <td colSpan="7" className="px-6 py-12 text-center">
                         <div className="text-gray-500">
-                          <div className="text-lg font-medium mb-2">No books found</div>
-                          <p className="text-sm">Get started by adding your first book.</p>
-                          <Link href="/admin/books/add">
-                            <button className="mt-4 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg">
-                              Add Book
-                            </button>
-                          </Link>
+                          <div className="text-lg font-medium mb-2">No orders found</div>
+                          <p className="text-sm">Orders will appear here when customers make purchases.</p>
                         </div>
                       </td>
                     </tr>
@@ -300,12 +320,12 @@ function BooksManagement() {
   );
 }
 
-export default function BooksManagementWrapper() {
+export default function OrdersManagementWrapper() {
   return (
     <AdminAuthProvider>
       <AdminProtectedRoute>
-        <BooksManagement />
+        <OrdersManagement />
       </AdminProtectedRoute>
     </AdminAuthProvider>
   );
-}
+} 

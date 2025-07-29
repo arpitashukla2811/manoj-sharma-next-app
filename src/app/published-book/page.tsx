@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiBookOpen, FiCalendar, FiShoppingCart } from 'react-icons/fi';
 import Link from 'next/link';
-import { booksAPI } from '../services/api';
+import { booksAPI } from '@/services/api';
+import { useCart } from '@/app/components/CartContext';
 
 const PublishedBookPage = () => {
   const containerVariants = {
@@ -30,6 +31,7 @@ const PublishedBookPage = () => {
   const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -38,6 +40,7 @@ const PublishedBookPage = () => {
         setError(null);
         const response = await booksAPI.getAll();
         const data = Array.isArray(response.data.data) ? response.data.data : [];
+        console.log('Published books page - fetched books:', data);
         setBooks(data);
         if (!Array.isArray(response.data.data)) {
           console.error('Books API did not return an array:', response.data.data);
@@ -50,6 +53,16 @@ const PublishedBookPage = () => {
     };
     fetchBooks();
   }, []);
+
+  const handleAddToCart = async (e: React.MouseEvent, book: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await addToCart({ ...book, id: book._id });
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -96,8 +109,11 @@ const PublishedBookPage = () => {
           animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto"
         >
-          {(books || []).map((book) => (
-            <Link href={`/published-book/${book.slug}`} key={book._id}>
+          {(books || []).map((book) => {
+            const identifier = book.slug || book._id;
+            console.log(`Book "${book.title}" - slug: ${book.slug}, id: ${book._id}, using: ${identifier}`);
+            return (
+              <Link href={`/published-book/${identifier}`} key={book._id}>
               <motion.div
                 variants={itemVariants}
                 whileHover={{ 
@@ -154,11 +170,7 @@ const PublishedBookPage = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="btn-primary flex items-center space-x-2"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        // Add to cart functionality here
-                      }}
+                      onClick={(e) => handleAddToCart(e, book)}
                     >
                       <FiShoppingCart className="w-5 h-5" />
                       <span>${book.price}</span>
@@ -167,7 +179,8 @@ const PublishedBookPage = () => {
                 </div>
               </motion.div>
             </Link>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
     </div>

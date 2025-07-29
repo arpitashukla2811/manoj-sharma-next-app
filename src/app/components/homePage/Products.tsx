@@ -97,7 +97,7 @@ const Products = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
           {products.map((product) => (
-            <Link href={`/products/${product.slug}`} key={product.title}>
+            <Link href={`/published-book/${product.slug}`} key={product.title}>
               <motion.div
                 variants={itemVariants}
                 whileHover={{ 

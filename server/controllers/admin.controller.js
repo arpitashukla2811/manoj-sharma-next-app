@@ -13,6 +13,7 @@ export const loginAdmin = async (req, res) => {
     const admin = await Admin.findOne({ email });
     if (admin && (await admin.matchPassword(password))) {
       res.json({
+        success: true,
         message: 'Login successful.',
         admin: {
           _id: admin._id,
@@ -22,10 +23,23 @@ export const loginAdmin = async (req, res) => {
         token: generateToken(admin._id),
       });
     } else {
-      res.status(401).json({ message: 'Invalid email or password.' });
+      res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+  }
+};
+
+// Validate admin token
+export const validateAdminToken = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.admin._id).select('-password');
+    if (!admin) {
+      return res.status(404).json({ success: false, message: 'Admin not found.' });
+    }
+    res.json({ success: true, admin });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 };
 

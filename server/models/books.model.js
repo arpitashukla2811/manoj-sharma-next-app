@@ -10,8 +10,6 @@ const generateSlug = (title) => {
 
 const bookSchema = new mongoose.Schema(
   {
-    // Note: MongoDB automatically creates a unique '_id' field.
-    // We can omit the custom 'id' field unless it's strictly required.
     title: {
       type: String,
       required: [true, 'Book title is required.'],
@@ -40,7 +38,7 @@ const bookSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, 'Price is required.'],
-      // Storing price as a number is better for calculations.
+      min: [0, 'Price cannot be negative'],
     },
     rating: {
       type: Number,
@@ -56,22 +54,14 @@ const bookSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    pages: {
-      type: Number,
-      required: true,
-    },
-    isbn: {
-      type: String,
-      required: [true, 'ISBN is required.'],
-      unique: true,
-    },
     genre: {
-      type: String, // Or [String] if you want to store genres as an array
+      type: String,
       required: true,
     },
     stock: {
       type: Number,
       default: 0,
+      min: [0, 'Stock cannot be negative'],
     },
     language: {
       type: String,
@@ -79,17 +69,15 @@ const bookSchema = new mongoose.Schema(
     },
     format: {
       type: String,
-      enum: ['Hardcover', 'Paperback', 'eBook'], // Restricts values to this list
+      enum: ['Hardcover', 'Paperback', 'eBook'],
       required: true,
-    },
-    dimensions: {
-      type: String,
-    },
-    weight: {
-      type: String,
     },
     amazonLink: {
       type: String,
+    },
+    coverImage: {
+      type: String,
+      required: [true, 'Cover image is required.'],
     },
   },
   {
@@ -105,5 +93,13 @@ bookSchema.pre('save', function (next) {
   }
   next();
 });
+
+// Indexes for better query performance
+bookSchema.index({ slug: 1 });
+bookSchema.index({ title: 'text', author: 'text', description: 'text' });
+bookSchema.index({ genre: 1 });
+bookSchema.index({ price: 1 });
+bookSchema.index({ rating: -1 });
+bookSchema.index({ createdAt: -1 });
 
 export default mongoose.model('Book', bookSchema);

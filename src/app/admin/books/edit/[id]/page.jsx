@@ -5,9 +5,11 @@ import { FiSave, FiArrowLeft, FiBookOpen, FiTrash2 } from 'react-icons/fi';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import AdminLayout from '../../../../components/AdminLayout';
-import { booksAPI } from '../../../../services/api';
+import { booksAPI } from '@/services/api';
+import { AdminAuthProvider } from '../../../../components/AdminAuthContext';
+import AdminProtectedRoute from '../../../../components/AdminProtectedRoute';
 
-export default function EditBook() {
+function EditBook() {
   const router = useRouter();
   const params = useParams();
   const bookId = params.id;
@@ -185,16 +187,14 @@ export default function EditBook() {
     if (window.confirm('Are you sure you want to delete this book? This action cannot be undone.')) {
       setIsSubmitting(true);
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // In a real app, you would send delete request to your API
-        console.log('Deleting book:', bookId);
-        
-        // Redirect to books list
-        router.push('/admin/books');
+        const response = await booksAPI.delete(bookId);
+        if (response.data.success) {
+          router.push('/admin/books');
+        } else {
+          alert(response.data.message || 'Failed to delete book');
+        }
       } catch (error) {
-        console.error('Error deleting book:', error);
+        alert(error.response?.data?.message || 'Error deleting book');
       } finally {
         setIsSubmitting(false);
       }
@@ -215,8 +215,7 @@ export default function EditBook() {
   }
 
   return (
-    <AdminLayout>
-      <div className="py-8">
+    <div className="py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <motion.div
@@ -618,6 +617,17 @@ export default function EditBook() {
           </motion.form>
         </div>
       </div>
-    </AdminLayout>
+  );
+}
+
+export default function EditBookWrapper() {
+  return (
+    <AdminAuthProvider>
+      <AdminProtectedRoute>
+        <AdminLayout>
+          <EditBook />
+        </AdminLayout>
+      </AdminProtectedRoute>
+    </AdminAuthProvider>
   );
 }

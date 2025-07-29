@@ -1,9 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { adminAPI } from '../../../services/api';
+import { adminAPI } from '@/services/api';
+import { AdminAuthProvider } from '../../../components/AdminAuthContext';
+import AdminProtectedRoute from '../../../components/AdminProtectedRoute';
 
-export default function AdminDetailsPage() {
+function AdminDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const [admin, setAdmin] = useState(null);
@@ -38,5 +40,15 @@ export default function AdminDetailsPage() {
       <div className="mb-4"><span className="font-semibold">Created At:</span> {new Date(admin.createdAt).toLocaleString()}</div>
       <button onClick={() => router.back()} className="text-amber-600 hover:underline text-sm">Back</button>
     </div>
+  );
+}
+
+export default function AdminDetailsPageWrapper() {
+  return (
+    <AdminAuthProvider>
+      <AdminProtectedRoute>
+        <AdminDetailsPage />
+      </AdminProtectedRoute>
+    </AdminAuthProvider>
   );
 } 

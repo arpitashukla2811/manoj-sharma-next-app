@@ -10,19 +10,23 @@ import {
   FiX, 
   FiHome,
   FiLogOut,
-  FiUser
+  FiUser,
+  FiShoppingCart
 } from 'react-icons/fi';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAdminAuth } from './AdminAuthContext';
 
 const AdminLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { admin, logout } = useAdminAuth();
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: FiHome },
     { name: 'Books', href: '/admin/books', icon: FiBookOpen },
-    { name: 'Analytics', href: '/admin/analytics', icon: FiTrendingUp },
+    { name: 'Orders', href: '/admin/orders', icon: FiShoppingCart },
     { name: 'Users', href: '/admin/users', icon: FiUsers },
     { name: 'Settings', href: '/admin/settings', icon: FiSettings },
   ];
@@ -32,6 +36,11 @@ const AdminLayout = ({ children }) => {
       return pathname === '/admin';
     }
     return pathname.startsWith(href);
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push('/admin/login');
   };
 
   return (
@@ -102,10 +111,14 @@ const AdminLayout = ({ children }) => {
                 <FiUser className="w-4 h-4 text-amber-600" />
               </div>
               <div className="ml-3 flex-1">
-                <p className="text-sm font-medium text-gray-900">Admin User</p>
-                <p className="text-xs text-gray-500">admin@example.com</p>
+                <p className="text-sm font-medium text-gray-900">{admin?.name || 'Admin User'}</p>
+                <p className="text-xs text-gray-500">{admin?.email || 'admin@example.com'}</p>
               </div>
-              <button className="p-1 text-gray-400 hover:text-gray-600">
+              <button 
+                onClick={handleLogout}
+                className="p-1 text-gray-400 hover:text-gray-600 hover:text-red-600 transition-colors"
+                title="Logout"
+              >
                 <FiLogOut className="w-4 h-4" />
               </button>
             </div>
@@ -134,8 +147,12 @@ const AdminLayout = ({ children }) => {
 
               <div className="flex items-center space-x-4">
                 <div className="relative">
-                  <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full">
-                    <FiUser className="w-5 h-5" />
+                  <button 
+                    onClick={handleLogout}
+                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-100 rounded-full transition-colors"
+                    title="Logout"
+                  >
+                    <FiLogOut className="w-5 h-5" />
                   </button>
                 </div>
               </div>

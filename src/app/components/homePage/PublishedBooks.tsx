@@ -7,7 +7,7 @@ import { FiBookOpen, FiCalendar, FiShoppingCart, FiExternalLink } from 'react-ic
 import BookDetailsModal from './BookDetailsModal';
 import Link from 'next/link';
 import { useCart } from '../CartContext';
-import { booksAPI } from '../../services/api';
+import { booksAPI } from '@/services/api';
 
 const PublishedBooks = () => {
   const [selectedBook, setSelectedBook] = useState<any>(null);
@@ -128,8 +128,13 @@ const PublishedBooks = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {(books || []).map((book, index) => (
-              <Link href={`/published-book/${book.slug}`} key={book._id}>
+            {(books || []).map((book, index) => {
+              // Skip books without proper identifiers
+              if (!book.slug && !book._id) {
+                return null;
+              }
+              return (
+                <Link href={`/published-book/${book.slug || book._id}`} key={book._id}>
                 <motion.div
                   variants={itemVariants}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
@@ -192,7 +197,8 @@ const PublishedBooks = () => {
                   </div>
                 </motion.div>
               </Link>
-            ))}
+            );
+            })}
           </div>
         )}
       </div>

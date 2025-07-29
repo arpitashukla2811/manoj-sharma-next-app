@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { cartAPI } from '../services/api';
+import { cartAPI } from '@/services/api';
 import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
     
     try {
       setLoading(true);
-      const response = await cartAPI.get();
+      const response = await cartAPI.getCart();
       if (response.data.success) {
         setCart(response.data.data);
       }
@@ -53,7 +53,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      const response = await cartAPI.addItem(book._id || book.id, quantity);
+      const response = await cartAPI.addToCart(book._id || book.id, quantity);
       if (response.data.success) {
         setCart(response.data.data);
       }
@@ -70,7 +70,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      const response = await cartAPI.removeItem(bookId);
+      const response = await cartAPI.removeFromCart(bookId);
       if (response.data.success) {
         setCart(response.data.data);
       }
@@ -86,7 +86,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      const response = await cartAPI.updateItem(bookId, quantity);
+      const response = await cartAPI.updateQuantity(bookId, quantity);
       if (response.data.success) {
         setCart(response.data.data);
       }
@@ -102,7 +102,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      const response = await cartAPI.clear();
+      const response = await cartAPI.clearCart();
       if (response.data.success) {
         setCart([]);
       }
@@ -127,13 +127,27 @@ export const CartProvider = ({ children }) => {
   const validateCart = async () => {
     if (!user) return { isValid: false, errors: ['User not authenticated'] };
 
-    try {
-      const response = await cartAPI.validate();
-      return response.data.data;
-    } catch (error) {
-      console.error('Failed to validate cart:', error);
-      return { isValid: false, errors: ['Failed to validate cart'] };
+    // Simple local validation
+    const errors = [];
+    
+    if (cart.length === 0) {
+      errors.push('Cart is empty');
     }
+    
+    // Check if all items have valid prices
+    for (const item of cart) {
+      if (!item.price || parseFloat(item.price.replace('$', '')) <= 0) {
+        errors.push(`Invalid price for ${item.title}`);
+      }
+      if (!item.quantity || item.quantity <= 0) {
+        errors.push(`Invalid quantity for ${item.title}`);
+      }
+    }
+    
+    return { 
+      isValid: errors.length === 0, 
+      errors 
+    };
   };
 
   const openCart = () => setIsCartOpen(true);

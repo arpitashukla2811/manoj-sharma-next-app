@@ -12,8 +12,12 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
+    const adminToken = localStorage.getItem('adminToken');
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else if (adminToken) {
+      config.headers.Authorization = `Bearer ${adminToken}`;
     }
     return config;
   },
@@ -30,7 +34,16 @@ api.interceptors.response.use(
       // Token expired or invalid
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/auth/login';
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('admin');
+      
+      // Redirect based on current path
+      const currentPath = window.location.pathname;
+      if (currentPath.startsWith('/admin')) {
+        window.location.href = '/admin/login';
+      } else {
+        window.location.href = '/auth/login';
+      }
     }
     return Promise.reject(error);
   }
@@ -89,6 +102,7 @@ export const cartAPI = {
 
 export const adminAPI = {
   login: (credentials) => api.post('/admin/login', credentials),
+  validate: () => api.get('/admin/validate'),
   getAll: () => api.get('/admin'),
   getById: (id) => api.get(`/admin/${id}`),
 };

@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
-import { useAdminAuth } from '../../components/AdminAuthContext';
+import { useAdminAuth, AdminAuthProvider } from '../../components/AdminAuthContext';
+import AdminProtectedRoute from '../../components/AdminProtectedRoute';
 
-export default function AdminSettingsPage() {
+function AdminSettingsPage() {
   const { admin } = useAdminAuth();
 
   if (!admin) {
@@ -16,5 +17,15 @@ export default function AdminSettingsPage() {
       <div className="mb-4"><span className="font-semibold">Email:</span> {admin.email}</div>
       {/* Add more settings here if needed */}
     </div>
+  );
+}
+
+export default function AdminSettingsPageWrapper() {
+  return (
+    <AdminAuthProvider>
+      <AdminProtectedRoute>
+        <AdminSettingsPage />
+      </AdminProtectedRoute>
+    </AdminAuthProvider>
   );
 } 
