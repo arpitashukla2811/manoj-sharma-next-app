@@ -6,6 +6,7 @@ import AboutAuthor from './AboutAuthor';
 import AwardSection from './AwardSection';
 import Hero from './Hero';
 import Gallery from './Gallery';
+import Movies from './Movies';
 const HomePage = () => {
   return (
     <>
@@ -13,6 +14,7 @@ const HomePage = () => {
     <PublishedBooks/>
     <AboutAuthor/>
     <AwardSection/>
+    <Movies/>
     <Gallery/>
     </>
   );
