@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import heroImg from "@/../public/images/author/Authorimg.jpeg";
+import heroImg from "@/../public/images/author/Authorimg.png";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -44,7 +44,7 @@ function Hero() {
 
           <div className="max-w-lg">
             <p className="text-xl md:text-2xl text-amber-900 italic font-medium">
-              "Destiny has a lot to do with the randomness of life"
+              "Destiny has a lot to do with the randomness of Life"
               <span className="block mt-2 text-lg text-amber-800 not-italic">
                 — Manoj Kumar Sharma
               </span>

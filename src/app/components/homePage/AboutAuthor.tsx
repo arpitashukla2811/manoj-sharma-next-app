@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import Image from "next/image";
-import authorImg from "@/../public/images/author/Authorimg.jpg";
+import authorImg from "@/../public/images/author/Authorimg.png";
 import { motion } from 'framer-motion';
 import { FiBook, FiPenTool, FiAward } from 'react-icons/fi';
 
@@ -83,17 +83,20 @@ function AboutAuthor() {
               initial={{ scale: 0.8, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-[var(--saffron-primary)] shadow-xl"
+              transition={{ duration: 0.6 }} 
+              
             >
-              <Image
-                src={authorImg}
-                alt="Manoj Kumar Sharma"
-                // fill
-                priority
-                className="object-cover object-center"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+              <div className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-[var(--saffron-primary)] shadow-xl relative">
+  <Image
+    src={authorImg}
+    alt="Manoj Kumar Sharma"
+    fill
+    priority
+    className="object-cover object-center"
+    sizes="(max-width: 800px) 100vw, 100vw"
+  />
+</div>
+
             </motion.div>
           </motion.div>
 
@@ -102,7 +105,7 @@ function AboutAuthor() {
             className="text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed mb-12"
           >
             I am Manoj Kumar Sharma, a poet and author dedicated to exploring the depths of human emotion through words.
-            My work reflects the beauty of life, love, and spiritual awakening.
+            My work reflects the beauty of life, love, and contemporary literature.
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

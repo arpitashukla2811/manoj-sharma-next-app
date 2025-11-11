@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
+import images from "next/image";
 import { motion } from 'framer-motion';
 import { FiAward, FiStar, FiBookOpen } from 'react-icons/fi';
 
@@ -30,7 +30,7 @@ const AwardSection = () => {
   const awards = [
     {
       icon: FiAward,
-      title: "Best Poetry Collection",
+      title: "Work by Now",
       description: "Awarded for outstanding contribution to contemporary poetry",
       year: "2023"
     },
