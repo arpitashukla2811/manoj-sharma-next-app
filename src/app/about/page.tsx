@@ -72,16 +72,16 @@ export default function About() {
               variants={itemVariants}
               className="text-base md:text-lg leading-relaxed mb-4"
             >
-              
+
             </motion.p>
             <motion.p
               variants={itemVariants}
               className="max-w-4xl mx-auto px-6 text-justify"
             >
               Manoj Kumar Sharma is a distinguished literary voice whose journey from engineering to authorship exemplifies the power of reinvention and creative expression. A retired engineer from ONGC, Sharma brings a unique blend of analytical precision and emotional depth to his writing. His professional background, rooted in science and structure, contrasts beautifully with the fluidity and introspection of his literary work—creating a compelling duality that defines his style.
-Born and raised in Thane, Maharashtra, Sharma has always been deeply connected to the cultural and social rhythms of urban India. This connection is vividly reflected in his four published books: Mirrro, Me No Pause Me Play, Juuhhuu, and Hi God How Are You. Each title explores different facets of contemporary life, from existential musings and personal transformation to the quirks of modern society and the search for meaning in everyday experiences.
-His writing is known for its candid voice, philosophical undertones, and ability to provoke thought while remaining accessible to a wide audience. Sharma’s narratives often blur the line between reality and reflection, inviting readers to pause, question, and engage with the world around them in new ways. Whether delving into the complexities of identity or capturing the pulse of city life, his work resonates with authenticity and insight.
-As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma continues to inspire readers with stories that are both deeply personal and universally relatable. His transition from a technical career to a literary one stands as a testament to the enduring power of curiosity, creativity, and the human spirit.
+              Born and raised in Thane, Maharashtra, Sharma has always been deeply connected to the cultural and social rhythms of urban India. This connection is vividly reflected in his four published books: Mirrro, Me No Pause Me Play, Juuhhuu, and Hi God How Are You. Each title explores different facets of contemporary life, from existential musings and personal transformation to the quirks of modern society and the search for meaning in everyday experiences.
+              His writing is known for its candid voice, philosophical undertones, and ability to provoke thought while remaining accessible to a wide audience. Sharma’s narratives often blur the line between reality and reflection, inviting readers to pause, question, and engage with the world around them in new ways. Whether delving into the complexities of identity or capturing the pulse of city life, his work resonates with authenticity and insight.
+              As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma continues to inspire readers with stories that are both deeply personal and universally relatable. His transition from a technical career to a literary one stands as a testament to the enduring power of curiosity, creativity, and the human spirit.
 
             </motion.p>
           </motion.div>
@@ -113,7 +113,7 @@ As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma 
             {/* import Image from 'next/image'; */}
             <Image
               alt="Award group photo"
-              src="https://storage.googleapis.com/a1aa/image/fcf21ac4-3e40-40f5-60f6-f37c54754aba.jpg"
+              src="/images/author/Authorimg.jpg"
               width={500}
               height={325}
               className="shadow-xl rounded-lg max-w-full h-auto border-4 border-amber-500 hover:shadow-2xl transition-shadow duration-300"
@@ -125,7 +125,7 @@ As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma 
             variants={itemVariants}
             className="mb-6 text-lg md:text-xl font-semibold"
           >
-            
+
           </motion.p>
           <motion.p
             variants={itemVariants}
@@ -166,7 +166,7 @@ As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma 
 
             </li>
             <li>
-             Authored four impactful books: Mirrro, Juhu, Me No Pause Me Play, and Hi God How Are You (most recent).
+              Authored four impactful books: Mirrro, Juhu, Me No Pause Me Play, and Hi God How Are You (most recent).
 
             </li>
             <li>
@@ -196,7 +196,7 @@ As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma 
             </li>
             <li>Featured a powerful title track by Usha Uthup, adding musical gravitas to the film’s message of awareness and empowerment.
 
-</li>
+            </li>
           </motion.ul>
         </motion.div>
       </motion.section>
@@ -227,15 +227,15 @@ As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma 
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8"
           >
             {[
-              "c2196530-78b2-4f1d-473f-cb2fd8779a98",
-              "c5a5eb7a-54e4-48c7-9008-4ce857b3acea",
-              "004c56ec-d1bb-4451-7697-a9da33a93a97",
-              "bda01c96-d247-45e0-6dd9-457a15a3788a",
-              "e6a38350-41b8-4e49-0e04-a267d847faab",
-              "ce684ad1-08a0-42a2-4ae1-cb598cb0e5a2",
-              "6e08ce78-da6d-4bec-35c4-6bba50a957da",
-              "76a86088-9dce-48b6-cea1-a64415959a04",
-              "e3a7f4a1-6cc7-42f4-9491-dbe7d3d463a4",
+              // "c2196530-78b2-4f1d-473f-cb2fd8779a98",
+              // "c5a5eb7a-54e4-48c7-9008-4ce857b3acea",
+              // "004c56ec-d1bb-4451-7697-a9da33a93a97",
+              // "bda01c96-d247-45e0-6dd9-457a15a3788a",
+              // "e6a38350-41b8-4e49-0e04-a267d847faab",
+              // "ce684ad1-08a0-42a2-4ae1-cb598cb0e5a2",
+              // "6e08ce78-da6d-4bec-35c4-6bba50a957da",
+              // "76a86088-9dce-48b6-cea1-a64415959a04",
+              // "e3a7f4a1-6cc7-42f4-9491-dbe7d3d463a4",
             ].map((imgId, index) => (
               <motion.img
                 key={index}
@@ -249,6 +249,27 @@ As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma 
               />
             ))}
           </motion.div>
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8"
+          >
+            {[
+              "Awards ",
+              "Certifications",
+              "Coming Soon",
+              "Coming Soon",
+            ].map((_, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center justify-center w-full h-40 border-4 border-amber-600 rounded-lg shadow-lg text-xl font-semibold text-gray-700 bg-gray-200"
+              >
+                Awards & Certificates
+              </motion.div>
+            ))}
+          </motion.div>
+
         </div>
       </motion.section>
     </motion.div>

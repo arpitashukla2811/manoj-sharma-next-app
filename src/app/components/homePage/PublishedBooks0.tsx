@@ -20,55 +20,20 @@ const PublishedBooks = () => {
     fetchBooks();
   }, []);
 
-  // const fetchBooks = async () => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const response = await booksAPI.getAll();
-  //     // Defensive: ensure data is an array
-  //     const data = Array.isArray(response.data.data) ? response.data.data : [];
-  //     setBooks(data);
-  //     if (!Array.isArray(response.data.data)) {
-  //       console.error('Books API did not return an array:', response.data.data);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching books:', error);
-  //     setError('Failed to load books. Please try again later.');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const fetchBooks = async () => {
     try {
       setLoading(true);
       setError(null);
-
-      // Try API call first
       const response = await booksAPI.getAll();
-      const data = Array.isArray(response.data?.data) ? response.data.data : [];
-
-      // If API returned valid data, use it
-      if (data.length > 0) {
-        setBooks(data);
-        return;
+      // Defensive: ensure data is an array
+      const data = Array.isArray(response.data.data) ? response.data.data : [];
+      setBooks(data);
+      if (!Array.isArray(response.data.data)) {
+        console.error('Books API did not return an array:', response.data.data);
       }
-
-      throw new Error("API returned no data");
-
     } catch (error) {
-      console.warn("Database unreachable — loading fallback JSON...");
-
-      try {
-        // Load local backup file
-        const localFile = await fetch("/books.json");
-        const fallbackBooks = await localFile.json();
-        setBooks(fallbackBooks);
-
-      } catch (fallbackErr) {
-        console.error("Failed loading fallback:", fallbackErr);
-        setError("Unable to load books.");
-      }
-
+      console.error('Error fetching books:', error);
+      setError('Failed to load books. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -124,7 +89,7 @@ const PublishedBooks = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <p className="text-red-600 mb-4">{error}</p>
-            <button
+            <button 
               onClick={fetchBooks}
               className="btn-primary"
             >
@@ -163,68 +128,76 @@ const PublishedBooks = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {books.map((book, index) => {
+            {(books || []).map((book, index) => {
               // Skip books without proper identifiers
               if (!book.slug && !book._id) {
                 return null;
               }
               return (
-                <Link
-                  href={`/published-book/${book.slug || book._id}`}
-                  key={book._id || book.slug || index}
-                >                  <motion.div
+                <Link href={`/published-book/${book.slug || book._id}`} key={book._id}>
+                <motion.div
                   variants={itemVariants}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
                   className="book-card group bg-white cursor-pointer"
                 >
-                    <div className="book-image relative w-full h-64 overflow-hidden">
-                      <Image
-                        src={book.image}
-                        alt={book.title}
-                        fill
-                        className="object-contain group-hover:scale-110 transition-all duration-500"
-                      />
-                    </div>
-
-                    <div className="book-content">
-                      <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3 group-hover:text-[var(--saffron-primary)] transition-colors duration-300">
-                        {book.title}
-                      </h3>
-                      <p className="text-[var(--text-secondary)] mb-4 line-clamp-2">
-                        {book.description}
-                      </p>
-                      <div className="flex items-center mb-4">
-                        <div className="flex text-[var(--saffron-primary)]">
-                          {[...Array(Math.round(book.rating || 5))].map((_, i) => (
-                            <FiBookOpen key={i} className="w-4 h-4 fill-current" />
-                          ))}
-                        </div>
-                        <span className="text-sm text-[var(--text-secondary)] ml-2">
-                          ({book.reviews || 0} reviews)
-                        </span>
+                  <div className="book-image">
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5 }}
+                      className="absolute inset-0 bg-gradient-to-br from-[var(--saffron-light)] to-[var(--saffron-primary)] flex items-center justify-center"
+                    >
+                      <motion.div
+                        whileHover={{ 
+                          scale: 1.2,
+                          rotate: 5,
+                          transition: { duration: 0.3 }
+                        }}
+                      >
+                        <FiBookOpen className="w-16 h-16 text-white" />
+                      </motion.div>
+                    </motion.div>
+                  </div>
+                  <div className="book-content">
+                    <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3 group-hover:text-[var(--saffron-primary)] transition-colors duration-300">
+                      {book.title}
+                    </h3>
+                    <p className="text-[var(--text-secondary)] mb-4 line-clamp-2">
+                      {book.description}
+                    </p>
+                    <div className="flex items-center mb-4">
+                      <div className="flex text-[var(--saffron-primary)]">
+                        {[...Array(Math.round(book.rating || 5))].map((_, i) => (
+                          <FiBookOpen key={i} className="w-4 h-4 fill-current" />
+                        ))}
                       </div>
-                      <div className="flex justify-between items-center">
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          className="flex items-center text-[var(--saffron-primary)]"
-                        >
-                          <FiCalendar className="w-5 h-5 mr-2" />
-                          <span className="font-medium">{book.year}</span>
-                        </motion.div>
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="btn-primary flex items-center space-x-2"
-                          onClick={e => handleAddToCart(e, book)}
-                        >
-                          <FiShoppingCart className="w-5 h-5" />
-                          <span>${book.price}</span>
-                        </motion.button>
-                      </div>
+                      <span className="text-sm text-[var(--text-secondary)] ml-2">
+                        ({book.reviews || 0} reviews)
+                      </span>
                     </div>
-                  </motion.div>
-                </Link>
-              );
+                    <div className="flex justify-between items-center">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className="flex items-center text-[var(--saffron-primary)]"
+                      >
+                        <FiCalendar className="w-5 h-5 mr-2" />
+                        <span className="font-medium">{book.year}</span>
+                      </motion.div>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="btn-primary flex items-center space-x-2"
+                        onClick={e => handleAddToCart(e, book)}
+                      >
+                        <FiShoppingCart className="w-5 h-5" />
+                        <span>${book.price}</span>
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            );
             })}
           </div>
         )}

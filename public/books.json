@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Me No Pause, Me Play",
+    "slug": "me-no-pause-me-play",
+    "description": "A story about womanhood, strength, and empowerment.",
+    "author": "Manoj Kumar Sharma",
+    "price": 275,
+    "rating": 4.6,
+    "reviews": 597,
+    "year": 2022,
+    "genre": "Women Empowerment",
+    "format": "Paperback",
+    "image": "https://m.media-amazon.com/images/I/51IklC+QoEL._AC_UY327_FMwebp_QL65_.jpg"
+  },
+  {
+    "title": "Hi God How Are You",
+    "slug": "hi-god-how-are-you",
+    "description": "A spiritual conversation with God through a fictional journey.",
+    "author": "Manoj Kumar Sharma",
+    "price": 299,
+    "rating": 4.6,
+    "reviews": 392,
+    "year": 2024,
+    "genre": "Spiritual",
+    "format": "Paperback",
+    "image": "https://m.media-amazon.com/images/I/61WPo1-+spL._AC_UY327_FMwebp_QL65_.jpg"
+  },
+  {
+    "title": "MIЯЯЯO: At The Weird Wayward",
+    "slug": "mirror-weird-wayward",
+    "description": "A futuristic story addressing India's social issues.",
+    "author": "Manoj Kumar Sharma",
+    "price": 229,
+    "rating": 4.0,
+    "reviews": 307,
+    "year": 2023,
+    "genre": "Futuristic Fiction",
+    "format": "Kindle Edition",
+    "image": "https://m.media-amazon.com/images/I/81iCGuotgZL._AC_UY327_FMwebp_QL65_.jpg"
+  },
+  {
+    "title": "Juuhhhuuuu",
+    "slug": "juuhhhuuuu",
+    "description": "Stories celebrating love beyond obstacles.",
+    "author": "Manoj Kumar Sharma",
+    "price": 249,
+    "rating": 4.6,
+    "reviews": 19,
+    "year": 2023,
+    "genre": "Romance",
+    "format": "Paperback",
+    "image": "https://m.media-amazon.com/images/I/71BYj4UM-OL._AC_UY327_FMwebp_QL65_.jpg"
+  }
+]
