@@ -1,14 +1,23 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { FiStar, FiShoppingCart, FiExternalLink, FiArrowLeft } from 'react-icons/fi';
-import Link from 'next/link';
-import { booksAPI } from '@/services/api';
-import { useCart } from '@/app/components/CartContext';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { FiStar, FiShoppingCart, FiExternalLink, FiArrowLeft } from "react-icons/fi";
+import Link from "next/link";
+import { booksAPI } from "@/services/api";
+import { useCart } from "@/app/components/CartContext";
 
-const ProductPage = ({ params }: { params: { slug: string } }) => {
-  const { slug } = params;
+export default function ProductPage({ params }: any) {
+  // Next.js 15 dynamic route fix
+  const [slug, setSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const resolvedParams = await params; // params may be a promise
+      setSlug(resolvedParams?.slug || null);
+    })();
+  }, [params]);
+
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -16,54 +25,34 @@ const ProductPage = ({ params }: { params: { slug: string } }) => {
   const { addToCart } = useCart();
 
   useEffect(() => {
+    if (!slug) return;
+
     const loadBook = async () => {
       setLoading(true);
       setNotFound(false);
-      console.log("🔍 Searching for book ->", slug);
 
-      // 1️⃣ Try server by ID
       try {
+        // Try API by ID
         const res = await booksAPI.getById(slug);
-        if (res?.data?.data) {
-          setProduct(res.data.data);
-          console.log("📌 Loaded from API (ID)");
-          return;
-        }
-      } catch (err) {
-        console.warn("❌ API ID fetch failed");
-      }
+        if (res?.data?.data) return setProduct(res.data.data);
+      } catch {}
 
-      // 2️⃣ Try server by slug
       try {
+        // Try API by slug
         const res = await booksAPI.getBySlug(slug);
-        if (res?.data?.data) {
-          setProduct(res.data.data);
-          console.log("📌 Loaded from API (Slug)");
-          return;
-        }
-      } catch (err) {
-        console.warn("❌ API Slug fetch failed");
-      }
+        if (res?.data?.data) return setProduct(res.data.data);
+      } catch {}
 
-      // 3️⃣ Fallback → load from local books.json
+      // Fallback JSON
       try {
-        const url = `${window.location.origin}/books.json`; // FIX here
-        const res = await fetch(url);
-
+        const res = await fetch("/books.json");
         if (res.ok) {
           const list = await res.json();
           const match = list.find((b: any) => b.slug === slug);
-
-          if (match) {
-            console.log("📌 Loaded locally from books.json");
-            setProduct(match);
-            return;
-          }
-        } else {
-          console.error("❌ Local JSON fetch failed status:", res.status);
+          if (match) return setProduct(match);
         }
       } catch (err) {
-        console.error("❌ Error reading books.json", err);
+        console.error(err);
       }
 
       setNotFound(true);
@@ -77,7 +66,7 @@ const ProductPage = ({ params }: { params: { slug: string } }) => {
     addToCart({ ...product, id: product._id || product.slug });
   };
 
-  if (loading)
+  if (loading || !slug)
     return (
       <div className="min-h-screen flex justify-center items-center">
         Loading...
@@ -105,7 +94,6 @@ const ProductPage = ({ params }: { params: { slug: string } }) => {
         </Link>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-6 shadow-lg rounded-xl grid grid-cols-1 md:grid-cols-2 gap-6">
-
           <div className="bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center">
             <img
               src={product.image || product.coverImage}
@@ -133,11 +121,7 @@ const ProductPage = ({ params }: { params: { slug: string } }) => {
             </button>
 
             {product.amazonLink && (
-              <a
-                href={product.amazonLink}
-                target="_blank"
-                className="w-full mt-3 block border py-3 text-center rounded-lg"
-              >
+              <a href={product.amazonLink} target="_blank" className="w-full mt-3 block border py-3 text-center rounded-lg">
                 <FiExternalLink className="inline-block mr-2" />
                 Buy on Amazon
               </a>
@@ -147,6 +131,4 @@ const ProductPage = ({ params }: { params: { slug: string } }) => {
       </div>
     </div>
   );
-};
-
-export default ProductPage;
+}
