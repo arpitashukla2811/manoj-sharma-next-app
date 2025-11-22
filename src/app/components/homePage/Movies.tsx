@@ -30,10 +30,10 @@ const Movies = () => {
   const moviesItems = [
     {
       type: 'image',
-      title: 'MIЯЯЯO: At The Weird Wayward',
-      description: "A futuristic story addressing India's social issues." ,
-      src: 'https://m.media-amazon.com/images/I/81iCGuotgZL._AC_UY327_FMwebp_QL65_.jpg',
-      thumbnail: 'https://m.media-amazon.com/images/I/81iCGuotgZL._AC_UY327_FMwebp_QL65_.jpg',
+      title: 'Me No Pause, Me Play',
+      description: "A story about womanhood, strength, and empowerment." ,
+      src: 'https://m.media-amazon.com/images/I/51IklC+QoEL._AC_UY327_FMwebp_QL65_.jpg',
+      thumbnail: 'https://m.media-amazon.com/images/I/51IklC+QoEL._AC_UY327_FMwebp_QL65_.jpg',
       alt: 'Book Launch Event',
     },
     // {
