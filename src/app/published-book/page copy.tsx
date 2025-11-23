@@ -173,7 +173,7 @@ const PublishedBookPage = () => {
                       onClick={(e) => handleAddToCart(e, book)}
                     >
                       <FiShoppingCart className="w-5 h-5" />
-                      <span>${book.price}</span>
+                      <span>₹{book.price}</span>
                     </motion.button>
                   </div>
                 </div>
