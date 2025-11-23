@@ -32,8 +32,8 @@ const Movies = () => {
       type: 'image',
       title: 'Me No Pause, Me Play',
       description: "A story about womanhood, strength, and empowerment." ,
-      src: 'https://m.media-amazon.com/images/I/51IklC+QoEL._AC_UY327_FMwebp_QL65_.jpg',
-      thumbnail: 'https://m.media-amazon.com/images/I/51IklC+QoEL._AC_UY327_FMwebp_QL65_.jpg',
+      src: '/images/movies/mepausemovie.jpeg',
+      thumbnail: '/images/movies/mepausemovie.jpeg',
       alt: 'Book Launch Event',
     },
     // {
@@ -132,7 +132,7 @@ const Movies = () => {
                         src={item.thumbnail || item.src}
                         alt={item.alt}
                         fill
-                        className="object-cover"
+                        className="object-contain"
                       />
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-[var(--saffron-light)] to-[var(--saffron-primary)] flex items-center justify-center">
