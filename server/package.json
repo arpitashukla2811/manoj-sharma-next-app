@@ -1,0 +1,10 @@
+{
+  "name": "manoj-sharma-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Manoj Sharma E-commerce Platform",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  }
+}
