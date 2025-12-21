@@ -42,33 +42,16 @@ const PublishedBooks = () => {
     try {
       setLoading(true);
       setError(null);
-
-      // Try API call first
       const response = await booksAPI.getAll();
-      const data = Array.isArray(response.data?.data) ? response.data.data : [];
-
-      // If API returned valid data, use it
-      if (data.length > 0) {
-        setBooks(data);
-        return;
+      // Defensive: ensure data is an array
+      const data = Array.isArray(response.data.data) ? response.data.data : [];
+      setBooks(data);
+      if (!Array.isArray(response.data.data)) {
+        console.error('Books API did not return an array:', response.data.data);
       }
-
-      throw new Error("API returned no data");
-
     } catch (error) {
-      console.warn("Database unreachable — loading fallback JSON...");
-
-      try {
-        // Load local backup file
-        const localFile = await fetch("/books.json");
-        const fallbackBooks = await localFile.json();
-        setBooks(fallbackBooks);
-
-      } catch (fallbackErr) {
-        console.error("Failed loading fallback:", fallbackErr);
-        setError("Unable to load books.");
-      }
-
+      console.error('Error fetching books:', error);
+      setError('Failed to load books. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -179,7 +162,7 @@ const PublishedBooks = () => {
                 >
                     <div className="book-image relative w-full h-64 overflow-hidden">
                       <Image
-                        src={book.image}
+                        src={book.coverImage}
                         alt={book.title}
                         fill
                         className="object-contain group-hover:scale-110 transition-all duration-500"

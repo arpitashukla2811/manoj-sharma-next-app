@@ -92,7 +92,6 @@ userSchema.virtual('isLocked').get(function() {
 });
 
 // Index for better query performance
-userSchema.index({ email: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ isActive: 1 });
 

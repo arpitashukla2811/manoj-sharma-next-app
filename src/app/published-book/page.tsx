@@ -40,25 +40,8 @@ const PublishedBookPage = () => {
         }
 
       } catch (apiError) {
-        console.warn("⚠ API failed → loading fallback JSON...");
-
-        try {
-          const jsonResponse = await fetch('/books.json');
-          const jsonData = await jsonResponse.json();
-
-          // Support both formats: array OR { books: [] }
-          const localBooks = Array.isArray(jsonData) ? jsonData : jsonData.books;
-
-          if (localBooks?.length > 0) {
-            console.log("📁 Loaded from local /books.json");
-            setBooks(localBooks);
-          } else {
-            console.error("❌ books.json loaded but empty or invalid format");
-          }
-
-        } catch (fileError) {
-          console.error("❌ Failed to load fallback books.json", fileError);
-        }
+        console.error("❌ API failed:", apiError);
+        // No fallback - only use backend data
       }
 
       setLoading(false);
@@ -127,7 +110,7 @@ const PublishedBookPage = () => {
                 >
                   <div className="h-64 w-full relative">
                     <Image
-                      src={book.image}
+                      src={book.coverImage}
                       alt={book.title}
                       fill
                       className="object-cover rounded-sm transition-transform duration-300 group-hover:scale-105"

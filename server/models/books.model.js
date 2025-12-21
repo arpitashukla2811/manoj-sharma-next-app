@@ -95,7 +95,6 @@ bookSchema.pre('save', function (next) {
 });
 
 // Indexes for better query performance
-bookSchema.index({ slug: 1 });
 bookSchema.index({ title: 'text', author: 'text', description: 'text' });
 bookSchema.index({ genre: 1 });
 bookSchema.index({ price: 1 });

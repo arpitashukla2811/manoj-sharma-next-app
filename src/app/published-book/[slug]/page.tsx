@@ -43,18 +43,7 @@ export default function ProductPage({ params }: any) {
         if (res?.data?.data) return setProduct(res.data.data);
       } catch {}
 
-      // Fallback JSON
-      try {
-        const res = await fetch("/books.json");
-        if (res.ok) {
-          const list = await res.json();
-          const match = list.find((b: any) => b.slug === slug);
-          if (match) return setProduct(match);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-
+      // No fallback - only use backend data
       setNotFound(true);
     };
 

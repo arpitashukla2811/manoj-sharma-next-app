@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "server": "node server/index.js",
-    "dev:server": "nodemon server/index.js"
+    "dev:server": "nodemon server/index.js",
+    "clear-books": "node clear-books.js"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",

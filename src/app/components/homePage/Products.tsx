@@ -1,10 +1,53 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from 'framer-motion';
 import { FiBookOpen, FiCalendar, FiShoppingCart } from 'react-icons/fi';
 import Link from 'next/link';
+import { booksAPI } from '@/services/api';
+import { useCart } from '../CartContext';
+
+interface Book {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  author: string;
+  price: number;
+  rating: number;
+  reviews: number;
+  year: number;
+  genre: string;
+  format: string;
+  coverImage: string;
+  amazonLink?: string;
+}
 
 const Products = () => {
+  const [products, setProducts] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { addToCart } = useCart();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await booksAPI.getAll();
+        if (response.data?.data) {
+          // Show first 4 books as featured products
+          setProducts(response.data.data.slice(0, 4));
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setError('Failed to load products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -25,53 +68,6 @@ const Products = () => {
       }
     }
   };
-
-  const products = [
-    {
-      title: "Pentacles",
-      description: "A collection of spiritual poems and reflections that will touch your soul and inspire your journey.",
-      year: "2023",
-      price: "$19.99",
-      rating: 5,
-      reviews: 128,
-      slug: "pentacles",
-      stock: 50,
-      format: "Hardcover"
-    },
-    {
-      title: "Frosted Glass",
-      description: "A journey through life's most profound moments, captured in beautiful prose and poetry.",
-      year: "2022",
-      price: "$24.99",
-      rating: 5,
-      reviews: 95,
-      slug: "frosted-glass",
-      stock: 35,
-      format: "Paperback"
-    },
-    {
-      title: "Abyss",
-      description: "Exploring the depths of human consciousness and the mysteries of existence.",
-      year: "2021",
-      price: "$21.99",
-      rating: 5,
-      reviews: 156,
-      slug: "abyss",
-      stock: 42,
-      format: "Hardcover"
-    },
-    {
-      title: "Winter Poems",
-      description: "A seasonal collection of poetic masterpieces that will warm your heart.",
-      year: "2020",
-      price: "$18.99",
-      rating: 5,
-      reviews: 87,
-      slug: "winter-poems",
-      stock: 28,
-      format: "Paperback"
-    }
-  ];
 
   return (
     <motion.section
@@ -95,17 +91,26 @@ const Products = () => {
           />
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-          {products.map((product) => (
-            <Link href={`/published-book/${product.slug}`} key={product.title}>
-              <motion.div
-                variants={itemVariants}
-                whileHover={{ 
-                  y: -10,
-                  transition: { duration: 0.3 }
-                }}
-                className="product-card group bg-white cursor-pointer"
-              >
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-red-600">{error}</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+            {products.map((product) => (
+              <Link href={`/published-book/${product.slug}`} key={product._id || product.slug}>
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ 
+                    y: -10,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="product-card group bg-white cursor-pointer"
+                >
                 <div className="product-image">
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -134,12 +139,12 @@ const Products = () => {
                   </p>
                   <div className="flex items-center mb-4">
                     <div className="flex text-[var(--saffron-primary)]">
-                      {[...Array(product.rating)].map((_, i) => (
+                      {[...Array(Math.floor(product.rating || 0))].map((_, i) => (
                         <FiBookOpen key={i} className="w-4 h-4 fill-current" />
                       ))}
                     </div>
                     <span className="text-sm text-[var(--text-secondary)] ml-2">
-                      ({product.reviews} reviews)
+                      ({product.reviews || 0} reviews)
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -157,11 +162,11 @@ const Products = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        // Add to cart functionality here
+                        addToCart({ ...product, id: product._id || product.slug });
                       }}
                     >
                       <FiShoppingCart className="w-5 h-5" />
-                      <span>{product.price}</span>
+                      <span>${product.price}</span>
                     </motion.button>
                   </div>
                 </div>
@@ -169,6 +174,7 @@ const Products = () => {
             </Link>
           ))}
         </div>
+        )}
       </div>
     </motion.section>
   );
