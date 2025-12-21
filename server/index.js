@@ -35,7 +35,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Rate limiting
-app.use('/api/', rateLimit(15 * 60 * 1000, 100)); // 100 requests per 15 minutes
+// app.use('/api/', rateLimit(15 * 60 * 1000, 100)); // 100 requests per 15 minutes
 
 // Static file serving for uploads
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
@@ -180,14 +180,19 @@ async function seedAdminAndBooks() {
 
 app.listen(PORT, async () => {
   try {
+    console.log('Starting server initialization...');
     await connectToDatabase();
+    console.log('Database connected, starting seeding...');
     await seedAdminAndBooks();
+    console.log('Seeding completed successfully');
     console.log(`🚀 Server is running on port ${PORT}`);
     console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
     console.log(`📚 API docs: http://localhost:${PORT}/api/docs`);
     console.log(`📁 Uploads: http://localhost:${PORT}/uploads`);
   } catch (error) {
     console.error('❌ Failed to start server:', error);
+    console.error('Error details:', error.message);
+    console.error('Stack trace:', error.stack);
     process.exit(1);
   }
 }); 
