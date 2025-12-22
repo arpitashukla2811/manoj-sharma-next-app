@@ -97,8 +97,57 @@ export const updateOrderStatus = async (req, res) => {
 // Get all orders (admin only)
 export const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find({}).sort({ createdAt: -1 });
-    res.json({ success: true, data: orders, total: orders.length });
+    const { page = 1, limit = 10, search, status } = req.query;
+    
+    let query = {};
+    
+    // Filter by status
+    if (status && status !== 'all') {
+      query.status = status;
+    }
+    
+    // Search functionality
+    if (search) {
+      // Search in order ID, user name, or user email
+      query.$or = [
+        { orderId: { $regex: search, $options: 'i' } }
+      ];
+      
+      // Also search in user data if populated
+      const users = await mongoose.model('User').find({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } }
+        ]
+      }).select('_id');
+      
+      if (users.length > 0) {
+        query.$or.push({ user: { $in: users.map(u => u._id) } });
+      }
+    }
+    
+    const skip = (Number(page) - 1) * Number(limit);
+    
+    const orders = await Order.find(query)
+      .populate('user', 'name email phone')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+    
+    const total = await Order.countDocuments(query);
+    const totalPages = Math.ceil(total / Number(limit));
+    
+    res.json({ 
+      success: true, 
+      data: orders, 
+      pagination: {
+        currentPage: Number(page),
+        totalPages,
+        total,
+        hasNextPage: Number(page) < totalPages,
+        hasPrevPage: Number(page) > 1
+      }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to fetch orders', error: error.message });
   }

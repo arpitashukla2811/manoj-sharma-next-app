@@ -188,8 +188,9 @@ export const ordersAPI = {
   getMyOrders: () => api.get('/orders/my-orders'),
   
   // Admin order management
-  getAllOrders: (params = {}) => api.get('/admin/orders', { params }),
-  updateOrderStatus: (id, status) => api.put(`/admin/orders/${id}/status`, { status }),
+  getAll: (params = {}) => api.get('/orders/admin/all', { params }),
+  getStats: () => api.get('/orders/admin/stats'),
+  updateOrderStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
 };
 
 // Users API calls

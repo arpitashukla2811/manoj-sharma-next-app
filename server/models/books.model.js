@@ -88,7 +88,7 @@ const bookSchema = new mongoose.Schema(
 
 // Mongoose middleware to automatically generate a slug before saving
 bookSchema.pre('save', function (next) {
-  if (this.isModified('title')) {
+  if (this.isModified('title') && !this.slug) {
     this.slug = generateSlug(this.title);
   }
   next();

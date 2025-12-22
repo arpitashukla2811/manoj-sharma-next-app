@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiSearch, FiFilter, FiEye, FiUser, FiMail, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiEye, FiUser, FiMail, FiCalendar, FiPhone, FiClock } from 'react-icons/fi';
 import Link from 'next/link';
 import AdminLayout from '../../components/AdminLayout';
 import { usersAPI } from '@/services/api';
@@ -119,10 +119,13 @@ function UsersManagement() {
                       Customer
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
+                      Contact
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Joined
+                      Role & Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Activity
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
@@ -139,20 +142,11 @@ function UsersManagement() {
                         className="hover:bg-gray-50"
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
-                                <FiUser className="w-5 h-5 text-amber-600" />
-                              </div>
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
-                                {user.name}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                Customer
-                              </div>
-                            </div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {user.name}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            ID: {user._id.slice(-6).toUpperCase()}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -160,18 +154,48 @@ function UsersManagement() {
                             <FiMail className="w-4 h-4 text-gray-400 mr-2" />
                             <span className="text-sm text-gray-900">{user.email}</span>
                           </div>
+                          {user.phone && (
+                            <div className="flex items-center mt-1">
+                              <FiPhone className="w-4 h-4 text-gray-400 mr-2" />
+                              <span className="text-sm text-gray-500">{user.phone}</span>
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-2">
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              user.role === 'admin' ? 'bg-red-100 text-red-800' :
+                              user.role === 'moderator' ? 'bg-blue-100 text-blue-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {user.role || 'user'}
+                            </span>
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            }`}>
+                              {user.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <FiCalendar className="w-4 h-4 text-gray-400 mr-2" />
                             <span className="text-sm text-gray-500">
-                              {new Date(user.createdAt).toLocaleDateString()}
+                              Joined: {new Date(user.createdAt).toLocaleDateString()}
                             </span>
                           </div>
+                          {user.lastLogin && (
+                            <div className="flex items-center mt-1">
+                              <FiClock className="w-4 h-4 text-gray-400 mr-2" />
+                              <span className="text-sm text-gray-500">
+                                Last: {new Date(user.lastLogin).toLocaleDateString()}
+                              </span>
+                            </div>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <Link href={`/admin/users/${user._id}`}>
-                            <button className="text-blue-600 hover:text-blue-900">
+                            <button className="text-blue-600 hover:text-blue-900 mr-3">
                               <FiEye className="w-4 h-4" />
                             </button>
                           </Link>
@@ -180,7 +204,7 @@ function UsersManagement() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="4" className="px-6 py-12 text-center">
+                      <td colSpan="5" className="px-6 py-12 text-center">
                         <div className="text-gray-500">
                           <div className="text-lg font-medium mb-2">No customers found</div>
                           <p className="text-sm">Customer accounts will appear here when they register.</p>

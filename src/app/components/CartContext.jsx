@@ -115,7 +115,7 @@ export const CartProvider = ({ children }) => {
 
   const getCartTotal = () => {
     return cart.reduce((total, item) => {
-      const price = parseFloat(item.price.replace('$', ''));
+      const price = parseFloat(item.price);
       return total + (price * item.quantity);
     }, 0);
   };
@@ -136,7 +136,7 @@ export const CartProvider = ({ children }) => {
     
     // Check if all items have valid prices
     for (const item of cart) {
-      if (!item.price || parseFloat(item.price.replace('$', '')) <= 0) {
+      if (!item.price || parseFloat(item.price) <= 0) {
         errors.push(`Invalid price for ${item.title}`);
       }
       if (!item.quantity || item.quantity <= 0) {

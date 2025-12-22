@@ -153,6 +153,59 @@ export const createBook = async (req, res) => {
       });
     }
 
+    // Validate and convert numeric fields
+    const price = parseFloat(data.price);
+    if (isNaN(price) || price < 0) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Price must be a valid positive number' 
+      });
+    }
+    data.price = price;
+
+    const year = parseInt(data.year);
+    if (isNaN(year) || year < 1000 || year > new Date().getFullYear() + 10) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Year must be a valid number' 
+      });
+    }
+    data.year = year;
+
+    // Validate optional numeric fields
+    if (data.rating !== undefined) {
+      const rating = parseFloat(data.rating);
+      if (isNaN(rating) || rating < 0 || rating > 5) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Rating must be a number between 0 and 5' 
+        });
+      }
+      data.rating = rating;
+    }
+
+    if (data.reviews !== undefined) {
+      const reviews = parseInt(data.reviews);
+      if (isNaN(reviews) || reviews < 0) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Reviews must be a non-negative integer' 
+        });
+      }
+      data.reviews = reviews;
+    }
+
+    if (data.stock !== undefined) {
+      const stock = parseInt(data.stock);
+      if (isNaN(stock) || stock < 0) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Stock must be a non-negative integer' 
+        });
+      }
+      data.stock = stock;
+    }
+
     // Check if cover image is provided
     if (!data.coverImage) {
       return res.status(400).json({ 
@@ -173,15 +226,14 @@ export const createBook = async (req, res) => {
       });
     }
 
-    // Set default values and ensure required fields
-    data.fullDescription = data.fullDescription || data.description; // Use description as fallback
-    data.genre = data.genre || 'Self-help';
-    data.language = data.language || 'English';
-    data.format = data.format || 'Paperback';
-    data.year = data.year || new Date().getFullYear();
-    data.rating = data.rating || 0;
-    data.reviews = data.reviews || 0;
-    data.stock = data.stock || 0;
+    // Validate format
+    const validFormats = ['Hardcover', 'Paperback', 'eBook'];
+    if (!validFormats.includes(data.format)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Format must be one of: Hardcover, Paperback, eBook' 
+      });
+    }
 
     // Validate and sanitize language field to prevent MongoDB language override errors
     const validLanguages = ['English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Russian', 'Chinese', 'Japanese', 'Korean', 'Arabic', 'Hindi', 'Bengali', 'Urdu', 'Turkish', 'Dutch', 'Swedish', 'Norwegian', 'Danish', 'Finnish', 'Polish', 'Czech', 'Hungarian', 'Romanian', 'Bulgarian', 'Greek', 'Hebrew', 'Thai', 'Vietnamese', 'Indonesian', 'Malay', 'Filipino', 'Persian', 'Ukrainian', 'Belarusian', 'Slovak', 'Slovenian', 'Croatian', 'Serbian', 'Bosnian', 'Macedonian', 'Albanian', 'Estonian', 'Latvian', 'Lithuanian', 'Georgian', 'Armenian', 'Azerbaijani', 'Kazakh', 'Uzbek', 'Kyrgyz', 'Tajik', 'Turkmen', 'Mongolian', 'Nepali', 'Sinhala', 'Tamil', 'Telugu', 'Kannada', 'Malayalam', 'Marathi', 'Gujarati', 'Punjabi', 'Odia', 'Assamese', 'Kashmiri', 'Sindhi', 'Konkani', 'Manipuri', 'Bodo', 'Sanskrit', 'Santhali', 'Dogri', 'Maithili', 'Kashmiri', 'Konkani', 'Manipuri', 'Bodo', 'Sanskrit', 'Santhali', 'Dogri', 'Maithili'];
@@ -207,6 +259,15 @@ export const createBook = async (req, res) => {
     };
     
     data.slug = generateSlug(data.title);
+    
+    // Ensure slug is unique
+    let uniqueSlug = data.slug;
+    let counter = 1;
+    while (await Book.findOne({ slug: uniqueSlug })) {
+      uniqueSlug = `${data.slug}-${counter}`;
+      counter++;
+    }
+    data.slug = uniqueSlug;
     
     console.log('Final book data before creation:', JSON.stringify(data, null, 2));
 
