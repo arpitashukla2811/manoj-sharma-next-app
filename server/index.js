@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import config from 'dotenv';
 import authRoutes from './routes/auth.routes.js'
 import orderRoutes from './routes/orders.routes.js'
 import userRoutes from './routes/user.routes.js'
@@ -14,8 +13,6 @@ import User from './models/user.model.js';
 import Book from './models/books.model.js';
 import Admin from './models/admin.model.js';
 import { rateLimit } from './middleware/auth.middleware.js';
-
-config.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -138,12 +135,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ 
-    success: false, 
+// 404 handler - catch all undefined routes
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
     message: 'Route not found',
-    path: req.originalUrl
+    path: req.originalUrl,
+    method: req.method
   });
 });
 
