@@ -184,9 +184,6 @@ app.listen(PORT, async () => {
     await seedAdminAndBooks();
     console.log('Seeding completed successfully');
     console.log(`🚀 Server is running on port ${PORT}`);
-    console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
-    console.log(`📚 API docs: http://localhost:${PORT}/api/docs`);
-    console.log(`📁 Uploads: http://localhost:${PORT}/uploads`);
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     console.error('Error details:', error.message);
