@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { usersAPI } from '@/services/api';
 import { AdminAuthProvider } from '../../../components/AdminAuthContext';
-import { AdminProtectedRoute } from '../../../components/AdminProtectedRoute';
+import AdminProtectedRoute from '../../../components/AdminProtectedRoute';
 import AdminLayout from '../../../components/AdminLayout';
 
 function UserDetailsPage() {

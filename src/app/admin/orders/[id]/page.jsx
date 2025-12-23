@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { ordersAPI } from '@/services/api';
-import { AdminAuthProvider } from '../../../../components/AdminAuthContext';
-import { AdminProtectedRoute } from '../../../../components/AdminProtectedRoute';
-import AdminLayout from '../../../../components/AdminLayout';
+import { AdminAuthProvider } from '../../../components/AdminAuthContext';
+import AdminProtectedRoute from '../../../components/AdminProtectedRoute';
+import AdminLayout from '../../../components/AdminLayout';
 import { FiArrowLeft, FiPackage, FiTruck, FiCheckCircle, FiXCircle, FiUser, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
 
 function OrderDetailsPage() {
