@@ -1,6 +1,7 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { adminAPI } from '../services/api';
 
 const AdminAuthContext = createContext();
 
@@ -20,17 +21,12 @@ export const AdminAuthProvider = ({ children }) => {
   // Check if token is valid
   const validateToken = async (token) => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/admin/validate', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      // Temporarily set the token for this request
+      localStorage.setItem('adminToken', token);
+      const response = await adminAPI.validate();
       
-      if (response.ok) {
-        const data = await response.json();
-        return data.admin;
+      if (response.data.success) {
+        return response.data.admin;
       }
       return null;
     } catch (error) {

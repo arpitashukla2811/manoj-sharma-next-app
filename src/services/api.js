@@ -209,6 +209,10 @@ export const usersAPI = {
 
 // Admin API calls
 export const adminAPI = {
+  // Authentication
+  login: (credentials) => api.post('/admin/login', credentials),
+  validate: () => api.get('/admin/validate'),
+  
   // Dashboard
   getDashboard: () => api.get('/admin/dashboard'),
   getStats: () => api.get('/admin/stats'),

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '../../components/AdminAuthContext';
 import { AdminAuthProvider } from '../../components/AdminAuthContext';
+import { adminAPI } from '../../services/api';
 
 function AdminLoginPage() {
   const [formData, setFormData] = useState({
@@ -40,24 +41,16 @@ function AdminLoginPage() {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await adminAPI.login(formData);
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      if (response.data.success) {
         setSuccess('Login successful! Redirecting...');
-        await login(data.admin, data.token);
+        await login(response.data.admin, response.data.token);
         setTimeout(() => {
           router.replace('/admin');
         }, 1000);
       } else {
-        setError(data.message || 'Login failed. Please try again.');
+        setError(response.data.message || 'Login failed. Please try again.');
       }
     } catch (err) {
       setError('Network error. Please check your connection and try again.');

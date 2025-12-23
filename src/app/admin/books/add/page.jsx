@@ -5,7 +5,7 @@ import { FiSave, FiArrowLeft, FiBookOpen, FiUpload, FiX, FiImage } from 'react-i
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AdminLayout from '../../../components/AdminLayout';
-import { booksAPI } from '@/services/api';
+import { booksAPI, uploadAPI } from '@/services/api';
 import { AdminAuthProvider } from '../../../components/AdminAuthContext';
 import AdminProtectedRoute from '../../../components/AdminProtectedRoute';
 
@@ -118,28 +118,14 @@ function AddBook() {
     }
 
     try {
-      const formData = new FormData();
-      formData.append('image', imageFile);
-
-      // Get admin token for authentication
-      const adminToken = localStorage.getItem('adminToken');
-
-      const response = await fetch('http://localhost:5000/api/v1/upload/image', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${adminToken}`,
-        },
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setFormData(prev => ({ ...prev, coverImage: data.data.url }));
+      const response = await uploadAPI.uploadSingle(imageFile);
+      
+      if (response.data.success) {
+        setFormData(prev => ({ ...prev, coverImage: response.data.data.url }));
         setSuccess('Image uploaded successfully!');
-        return data.data.url;
+        return response.data.data.url;
       } else {
-        throw new Error(data.message || 'Failed to upload image');
+        throw new Error(response.data.message || 'Failed to upload image');
       }
     } catch (error) {
       setError('Failed to upload image. Please try again.');
