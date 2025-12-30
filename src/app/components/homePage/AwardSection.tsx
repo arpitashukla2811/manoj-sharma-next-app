@@ -31,7 +31,7 @@ const AwardSection = () => {
     {
       icon: FiAward,
       title: "Work by Now",
-      description: "Awarded for outstanding contribution to contemporary poetry",
+      description: "Awarded for outstanding contribution to contemporary author",
       year: "2023"
     },
     {
@@ -43,7 +43,7 @@ const AwardSection = () => {
     {
       icon: FiBookOpen,
       title: "Reader's Choice",
-      description: "Voted as the most influential poet of the year",
+      description: "Voted as the most influential author of the year",
       year: "2021"
     }
   ];

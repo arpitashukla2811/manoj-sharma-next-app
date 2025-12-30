@@ -45,10 +45,10 @@ const Gallery = () => {
     },
     {
       type: 'image',
-      title: 'Poetry Reading',
-      description: 'Live poetry reading session',
-      src: '/images/gallery/poetry-reading.jpg',
-      alt: 'Poetry Reading'
+      title: 'author Reading',
+      description: 'Live author reading session',
+      src: '/images/gallery/author-reading.jpg',
+      alt: 'Author Reading'
     },
     {
       type: 'video',

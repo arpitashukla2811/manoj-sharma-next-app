@@ -31,7 +31,7 @@ function AboutAuthor() {
     {
       icon: FiBook,
       title: "Published Works",
-      description: "Multiple acclaimed poetry collections that have touched readers worldwide"
+      description: "Multiple acclaimed author collections that have touched readers worldwide"
     },
     {
       icon: FiPenTool,
@@ -41,7 +41,7 @@ function AboutAuthor() {
     {
       icon: FiAward,
       title: "Recognition",
-      description: "Awarded for outstanding contribution to contemporary poetry"
+      description: "Awarded for outstanding contribution to contemporary author"
     }
   ];
 
@@ -104,7 +104,7 @@ function AboutAuthor() {
             variants={itemVariants}
             className="text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed mb-12"
           >
-            I am Manoj Kumar Sharma, a poet and author dedicated to exploring the depths of human emotion through words.
+            I am Manoj Kumar Sharma, an author dedicated to exploring the depths of human emotion through words.
             My work reflects the beauty of life, love, and contemporary literature.
           </motion.p>
 

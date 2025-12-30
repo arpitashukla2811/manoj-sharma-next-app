@@ -11,8 +11,8 @@ import { CartProvider } from "./components/CartContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Manoj Kumar Sharma - Author & Poet",
-  description: "Explore the literary works of Manoj Kumar Sharma, featuring poetry, prose, and spiritual reflections.",
+  title: "Manoj Kumar Sharma - Author",
+  description: "Explore the literary works of Manoj Kumar Sharma, featuring author, prose, and spiritual reflections.",
 };
 
 export default function RootLayout({

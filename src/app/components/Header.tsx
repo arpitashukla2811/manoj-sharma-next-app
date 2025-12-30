@@ -40,7 +40,7 @@ const Header = () => {
               </motion.div>
               <div className="hidden sm:block">
                 <div className="text-sm font-medium text-gray-900">Manoj Kumar Sharma</div>
-                <div className="text-xs text-gray-500">Author & Poet</div>
+                <div className="text-xs text-gray-500">Author</div>
               </div>
             </Link>
 

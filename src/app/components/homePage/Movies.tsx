@@ -46,10 +46,10 @@ const Movies = () => {
     // },
     // {
     //   type: 'image',
-    //   title: 'Poetry Reading',
+    //   title: 'Author Reading',
     //   description: 'Receiving the prestigious literary award',
     //   src: '/images/movies/interstellar.jpg',
-    //   alt: 'Poetry Reading',
+    //   alt: 'Author Reading',
     // },
     // {
     //   type: 'video',
