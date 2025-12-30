@@ -66,7 +66,7 @@ export default function About() {
               variants={itemVariants}
               className="uppercase  text-sm md:text-base font-semibold mb-4 leading-relaxed tracking-wide"
             >
-              EX CORPORATE PROFESSIONAL, AUTHOR, READER.
+              EX CORPORATE PROFESSIONAL, AUTHOR, PRODUCER.
             </motion.p>
             <motion.p
               variants={itemVariants}

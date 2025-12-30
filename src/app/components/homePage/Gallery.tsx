@@ -45,8 +45,8 @@ const Gallery = () => {
     },
     {
       type: 'image',
-      title: 'author Reading',
-      description: 'Live author reading session',
+      title: 'Novel Reading',
+      description: 'Live Novel reading session',
       src: '/images/gallery/author-reading.jpg',
       alt: 'Author Reading'
     },

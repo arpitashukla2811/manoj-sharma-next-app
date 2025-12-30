@@ -31,7 +31,7 @@ const AwardSection = () => {
     {
       icon: FiAward,
       title: "Work by Now",
-      description: "Awarded for outstanding contribution to contemporary author",
+      description: "Awarded for outstanding contribution to contemporary novel",
       year: "2023"
     },
     {

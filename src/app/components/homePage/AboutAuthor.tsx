@@ -31,7 +31,7 @@ function AboutAuthor() {
     {
       icon: FiBook,
       title: "Published Works",
-      description: "Multiple acclaimed author collections that have touched readers worldwide"
+      description: "Multiple acclaimed novel collections that have touched readers worldwide"
     },
     {
       icon: FiPenTool,
@@ -41,7 +41,7 @@ function AboutAuthor() {
     {
       icon: FiAward,
       title: "Recognition",
-      description: "Awarded for outstanding contribution to contemporary author"
+      description: "Awarded for outstanding contribution to contemporary novel"
     }
   ];
 
