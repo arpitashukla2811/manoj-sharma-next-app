@@ -40,7 +40,7 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/products" className="text-[var(--saffron-light)] hover:text-white transition-colors duration-300">
+                                <Link href="/published-book" className="text-[var(--saffron-light)] hover:text-white transition-colors duration-300">
                                     Books
                                 </Link>
                             </li>
