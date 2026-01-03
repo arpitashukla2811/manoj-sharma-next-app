@@ -32,19 +32,20 @@ export default function ProductPage({ params }: any) {
       setNotFound(false);
 
       try {
-        // Try API by ID
-        const res = await booksAPI.getById(slug);
-        if (res?.data?.data) return setProduct(res.data.data);
-      } catch {}
-
-      try {
-        // Try API by slug
+        // Get book by slug
         const res = await booksAPI.getBySlug(slug);
-        if (res?.data?.data) return setProduct(res.data.data);
-      } catch {}
-
-      // No fallback - only use backend data
-      setNotFound(true);
+        if (res?.data?.data) {
+          setProduct(res.data.data);
+        } else {
+          setNotFound(true);
+        }
+      } catch (error) {
+        console.error('Error loading book:', error);
+        setNotFound(true);
+        setError('Failed to load book');
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadBook();
