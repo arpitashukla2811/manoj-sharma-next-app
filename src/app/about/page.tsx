@@ -78,8 +78,8 @@ export default function About() {
               variants={itemVariants}
               className="max-w-4xl mx-auto px-6 text-justify"
             >
-              Manoj Kumar Sharma is a distinguished literary voice whose journey from corporate to authorship exemplifies the power of reinvention and creative expression. A retired engineer from renounced corporate company, Sharma brings a unique blend of analytical precision and emotional depth to his writing. His professional background, rooted in science and structure, contrasts beautifully with the fluidity and introspection of his literary work—creating a compelling duality that defines his style.
-              Born and raised in Thane, Maharashtra, Manoj has always been deeply connected to the cultural and social rhythms of urban India. This connection is vividly reflected in his four published books: Mirrro, Me No Pause Me Play, Juuhhuu, and Hi God How Are You. Each title explores different facets of contemporary life, from existential musings and personal transformation to the quirks of modern society and the search for meaning in everyday experiences.
+              Manoj Kumar Sharma is a distinguished literary voice whose journey from corporate to authorship exemplifies the power of reinvention and creative expression. A retired corporate professional from renounced corporate company, Sharma brings a unique blend of analytical precision and emotional depth to his writing. His professional background, rooted in science and structure, contrasts beautifully with the fluidity and introspection of his literary work—creating a compelling duality that defines his style.
+              hailing from Thane, Maharashtra, Manoj has always been deeply connected to the cultural and social rhythms of urban India. This connection is vividly reflected in his four published books: Mirrro, Me No Pause Me Play, Juuhhuu, and Hi God How Are You. Each title explores different facets of contemporary life, from existential musings and personal transformation to the quirks of modern society and the search for meaning in everyday experiences.
               His writing is known for its candid voice, philosophical undertones, and ability to provoke thought while remaining accessible to a wide audience. Manoj’s narratives often blur the line between reality and reflection, inviting readers to pause, question, and engage with the world around them in new ways. Whether delving into the complexities of identity or capturing the pulse of city life, his work resonates with authenticity and insight.
               As a well-regarded figure in contemporary Indian literature, Manoj Kumar Sharma continues to inspire readers with stories that are both deeply personal and universally relatable. His transition from a technical career to a literary one stands as a testament to the enduring power of curiosity, creativity, and the human spirit.
 
@@ -138,7 +138,7 @@ export default function About() {
             className="list-disc list-inside mb-8 text-base md:text-lg space-y-2"
           >
             <li>
-              Retired as General Manager from a leading oil company, bringing decades of leadership and insight into his literary work.
+              Retired corporate professional from corporate company, bringing decades of leadership and insight into his literary work.
 
             </li>
             <li>
