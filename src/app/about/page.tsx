@@ -4,7 +4,9 @@ import Image from "next/image";
 
 import { motion } from "framer-motion";
 
+
 export default function About() {
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -25,6 +27,8 @@ export default function About() {
       },
     },
   };
+
+  const MotionImage = motion.create(Image);
 
   return (
     <motion.div initial="hidden" animate="visible" variants={containerVariants}>
@@ -204,15 +208,17 @@ export default function About() {
       {/* Section 3: Awards & Recognition */}
       <motion.section
         variants={itemVariants}
-        className="bg-gradient-to-b from-amber-50 to-amber-100 py-12 md:py-20 px-6"
+        className="bg-gradient-to-b from-amber-50 to-amber-100 py-16"
       >
-        <div className="max-w-7xl mx-auto">
+        {/* Heading */}
+        <div className="max-w-7xl mx-auto px-6">
           <motion.h3
             variants={itemVariants}
             className="text-center text-amber-900 font-bold text-2xl md:text-3xl mb-4"
           >
             AWARDS &amp; RECOGNITION
           </motion.h3>
+
           <motion.div
             variants={itemVariants}
             className="flex justify-center mb-12"
@@ -222,56 +228,38 @@ export default function About() {
             <div className="w-2 h-2 rounded-full bg-amber-500" />
             <div className="w-2 h-2 rounded-full bg-amber-500 ml-2" />
           </motion.div>
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8"
-          >
-            {[
-              // "c2196530-78b2-4f1d-473f-cb2fd8779a98",
-              // "c5a5eb7a-54e4-48c7-9008-4ce857b3acea",
-              // "004c56ec-d1bb-4451-7697-a9da33a93a97",
-              // "bda01c96-d247-45e0-6dd9-457a15a3788a",
-              // "e6a38350-41b8-4e49-0e04-a267d847faab",
-              // "ce684ad1-08a0-42a2-4ae1-cb598cb0e5a2",
-              // "6e08ce78-da6d-4bec-35c4-6bba50a957da",
-              // "76a86088-9dce-48b6-cea1-a64415959a04",
-              // "e3a7f4a1-6cc7-42f4-9491-dbe7d3d463a4",
-            ].map((imgId, index) => (
-              <motion.img
-                key={index}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                alt={`Award image ${index + 1}`}
-                className="w-full h-auto object-contain border-4 border-amber-600 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300"
-                src={`https://storage.googleapis.com/a1aa/image/${imgId}.jpg`}
-                width={300}
-                height={300}
-              />
-            ))}
-          </motion.div>
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8"
-          >
-            {[
-              "Awards ",
-              "Certifications",
-              "Coming Soon",
-              "Coming Soon",
-            ].map((_, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center justify-center w-full h-40 border-4 border-amber-600 rounded-lg shadow-lg text-xl font-semibold text-gray-700 bg-gray-200"
-              >
-                Awards & Certificates
-              </motion.div>
-            ))}
-          </motion.div>
-
         </div>
+
+        {/* Awards Grid */}
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 max-w-7xl mx-auto px-6 mb-20"
+        >
+          {[
+            "/images/awards/award-2.jpeg",
+            "/images/awards/award-3.jpeg",
+            "/images/awards/award-4.jpeg",
+            "/images/awards/award-5.jpeg",
+            "/images/awards/award-6.jpeg",
+            "/images/awards/award-7.jpeg",
+            "/images/awards/award-1.jpeg",
+          ].map((src, index) => (
+            <MotionImage
+              key={index}
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+              src={src}
+              alt={`Award image ${index + 1}`}
+              width={300}
+              height={300}
+              className="w-full h-auto object-contain border-4 border-amber-600 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300"
+              priority={index === 0}
+            />
+          ))}
+        </motion.div>
       </motion.section>
+
+
     </motion.div>
   );
 }
