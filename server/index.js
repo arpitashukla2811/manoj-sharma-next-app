@@ -22,7 +22,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
       'http://localhost:3000',
-      'https://manoj-sharma-next-app-dun.vercel.app'
+      'https://manojkumarsharma.in'
     ];
     
     const frontendUrl = process.env.FRONTEND_URL;
