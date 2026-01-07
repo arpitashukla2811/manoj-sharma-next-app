@@ -44,7 +44,7 @@ const AwardSection = () => {
       icon: FiBookOpen,
       title: "Reader's Choice",
       description: "Voted as the most influential author of the year",
-      year: "2021"
+      year: "2023"
     }
   ];
 

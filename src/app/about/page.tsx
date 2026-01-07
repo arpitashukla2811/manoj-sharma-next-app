@@ -236,12 +236,18 @@ export default function About() {
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 max-w-7xl mx-auto px-6 mb-20"
         >
           {[
-            "/images/awards/award-2.jpeg",
-            "/images/awards/award-3.jpeg",
-            "/images/awards/award-4.jpeg",
-            "/images/awards/award-5.jpeg",
-            "/images/awards/award-6.jpeg",
+            "/images/awards/award-13.jpeg",
+            "/images/awards/award-12.jpeg",
+            "/images/awards/award-11.jpeg",
+            "/images/awards/award-10.jpeg",
+            "/images/awards/award-9.jpeg",
+            "/images/awards/award-8.jpeg",
             "/images/awards/award-7.jpeg",
+            "/images/awards/award-6.jpeg",
+            "/images/awards/award-5.jpeg",
+            "/images/awards/award-4.jpeg",
+            "/images/awards/award-3.jpeg",
+            "/images/awards/award-2.jpeg",
             "/images/awards/award-1.jpeg",
           ].map((src, index) => (
             <MotionImage

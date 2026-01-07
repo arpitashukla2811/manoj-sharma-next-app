@@ -35,21 +35,21 @@ export default function ContactPage() {
                 <FiMail className="w-6 h-6 text-[var(--saffron-primary)]" />
                 <div>
                   <h3 className="font-medium text-[var(--text-primary)]">Email</h3>
-                  <p className="text-[var(--text-secondary)]">contact@manojsharma.com</p>
+                  <p className="text-[var(--text-secondary)]">manojkumarsharmma@gmail.com</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
                 <FiPhone className="w-6 h-6 text-[var(--saffron-primary)]" />
                 <div>
                   <h3 className="font-medium text-[var(--text-primary)]">Phone</h3>
-                  <p className="text-[var(--text-secondary)]">+1 (555) 123-4567</p>
+                  <p className="text-[var(--text-secondary)]">+91 9819612604</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
                 <FiMapPin className="w-6 h-6 text-[var(--saffron-primary)]" />
                 <div>
                   <h3 className="font-medium text-[var(--text-primary)]">Location</h3>
-                  <p className="text-[var(--text-secondary)]">New Delhi, India</p>
+                  <p className="text-[var(--text-secondary)]">Thane, Maharastra</p>
                 </div>
               </div>
             </div>

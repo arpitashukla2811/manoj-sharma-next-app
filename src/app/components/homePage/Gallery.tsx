@@ -31,7 +31,7 @@ const Gallery = () => {
     {
       type: 'image',
       title: 'Book Launch Event',
-      description: 'The grand launch of "Pentacles"',
+      description: 'The grand launch of "Me No Pause, Me Play"',
       src: '/images/gallery/book-launch.jpg',
       alt: 'Book Launch Event'
     },
