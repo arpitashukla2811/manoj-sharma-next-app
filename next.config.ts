@@ -13,6 +13,22 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  experimental: {
+    optimizeCss: true,
+  },
+  // Optimize CSS loading to reduce preload warnings
+  webpack: (config, { dev }) => {
+    if (!dev) {
+      // Optimize CSS chunks in production
+      config.optimization.splitChunks.cacheGroups.styles = {
+        name: 'styles',
+        test: /\.css$/,
+        chunks: 'all',
+        enforce: true,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
