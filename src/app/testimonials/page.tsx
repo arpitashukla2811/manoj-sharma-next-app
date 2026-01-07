@@ -81,7 +81,7 @@ export default function TestimonialsPage() {
         ))}
       </div>
 
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
@@ -100,7 +100,7 @@ export default function TestimonialsPage() {
         >
           Write a Review
         </motion.button>
-      </motion.div>
+      </motion.div> */}
     </motion.div>
   );
 } 

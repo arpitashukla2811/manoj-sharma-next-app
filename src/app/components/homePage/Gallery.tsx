@@ -137,7 +137,7 @@ const Gallery = () => {
           variants={itemVariants}
           className="text-center"
         >
-          <Link href="/about">
+          <Link href="/gallery">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

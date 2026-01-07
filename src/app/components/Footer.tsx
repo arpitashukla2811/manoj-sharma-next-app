@@ -1,6 +1,6 @@
 'use client'
 import { motion } from 'framer-motion';
-import { FiInstagram, FiTwitter, FiFacebook, FiLinkedin } from 'react-icons/fi';
+import { FiInstagram, FiTwitter, FiFacebook, FiLinkedin, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
 import Link from "next/link"
 import React from "react"
 
@@ -59,13 +59,23 @@ const Footer = () => {
                                     Contact
                                 </Link>
                             </li>
+                            <li>
+                                <Link href="/terms" className="text-[var(--saffron-light)] hover:text-white transition-colors duration-300">
+                                    Terms of Service
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/privacy" className="text-[var(--saffron-light)] hover:text-white transition-colors duration-300">
+                                    Privacy Policy
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
-                    {/* Social Links */}
+                    {/* Social Links & Contact */}
                     <div className="space-y-4">
                         <h3 className="text-2xl font-bold mb-4">Connect With Us</h3>
-                        <div className="flex space-x-6">
+                        <div className="flex space-x-6 mb-6">
                             {socialLinks.map((social, index) => (
                                 <motion.a
                                     key={social.label}
@@ -83,6 +93,26 @@ const Footer = () => {
                                     <social.icon />
                                 </motion.a>
                             ))}
+                        </div>
+                        <div className="space-y-3">
+                            <div className="flex items-center space-x-3">
+                                <FiMail className="text-[var(--saffron-light)] w-5 h-5 flex-shrink-0" />
+                                <a href="mailto:manojkumarsharmma@gmail.com" className="text-[var(--saffron-light)] hover:text-white transition-colors duration-300">
+                                    manojkumarsharmma@gmail.com
+                                </a>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                                <FiPhone className="text-[var(--saffron-light)] w-5 h-5 flex-shrink-0" />
+                                <a href="tel:9819612604" className="text-[var(--saffron-light)] hover:text-white transition-colors duration-300">
+                                    +91 9819612604
+                                </a>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                                <FiMapPin className="text-[var(--saffron-light)] w-5 h-5 flex-shrink-0" />
+                                <span className="text-[var(--saffron-light)]">
+                                    Thane, Maharashtra
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
