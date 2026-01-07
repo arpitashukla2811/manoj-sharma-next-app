@@ -22,14 +22,15 @@ const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
       'http://localhost:3000',
-      'https://manojkumarsharma.in'
+      'https://manojkumarsharma.in',
+      'https://manoj-sharma-next-app-dun.vercel.app'
     ];
-    
+
     const frontendUrl = process.env.FRONTEND_URL;
     if (frontendUrl) {
       allowedOrigins.push(frontendUrl.replace(/\/$/, '')); // Remove trailing slash
     }
-    
+
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
