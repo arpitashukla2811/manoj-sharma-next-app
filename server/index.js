@@ -23,7 +23,8 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'https://manojkumarsharma.in',
-      'https://manoj-sharma-next-app-dun.vercel.app'
+      'https://manoj-sharma-next-app-dun.vercel.app',
+      'https://manoj-sharma-next-app.onrender.com'
     ];
 
     const frontendUrl = process.env.FRONTEND_URL;
@@ -31,9 +32,11 @@ const corsOptions = {
       allowedOrigins.push(frontendUrl.replace(/\/$/, '')); // Remove trailing slash
     }
 
+    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.warn(`⚠️  CORS blocked origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },

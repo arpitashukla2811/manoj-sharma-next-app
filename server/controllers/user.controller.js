@@ -3,8 +3,12 @@ import jwt from 'jsonwebtoken';
 
 // Helper to generate JWT
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+  const secret = process.env.JWT_SECRET || 'secret-jwt-key-2026';
+  if (!process.env.JWT_SECRET) {
+    console.warn('⚠️  WARNING: JWT_SECRET not set in environment variables. Using default secret.');
+  }
+  return jwt.sign({ id }, secret, {
+    expiresIn: process.env.JWT_EXPIRES_IN || '30d',
   });
 };
 
@@ -19,24 +23,34 @@ export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Please provide all required fields.' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'Please provide all required fields.' 
+      });
     }
 
+    // Normalize email to lowercase
+    const normalizedEmail = email.toLowerCase().trim();
+
     // Check if user already exists using the User model
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
-      return res.status(400).json({ message: 'User with this email already exists.' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'User with this email already exists.' 
+      });
     }
     
     // Create new user. Password hashing is handled by the model's 'pre-save' hook.
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: normalizedEmail,
       password,
     });
 
     if (user) {
       res.status(201).json({
+        success: true,
         message: 'User registered successfully.',
         user: {
           _id: user._id,
@@ -46,10 +60,37 @@ export const registerUser = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-        res.status(400).json({ message: 'Invalid user data.' });
+        res.status(400).json({ 
+          success: false,
+          message: 'Invalid user data.' 
+        });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('Registration error:', error);
+    
+    // Handle MongoDB duplicate key error
+    if (error.code === 11000) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'User with this email already exists.' 
+      });
+    }
+    
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ 
+        success: false,
+        message: 'Validation error',
+        errors 
+      });
+    }
+    
+    res.status(500).json({ 
+      success: false,
+      message: 'Server error. Please try again later.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
 
