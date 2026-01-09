@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         'Please enter a valid email address.',
       ],
     },
@@ -97,14 +97,24 @@ userSchema.index({ isActive: 1 });
 
 // Middleware: Hash password before saving the user document 🔑
 userSchema.pre('save', async function (next) {
-  // Only hash the password if it has been modified (or is new)
-  if (!this.isModified('password')) {
-    return next();
-  }
+  try {
+    // Only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) {
+      return next();
+    }
 
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
+    // Ensure password exists and is a string
+    if (!this.password || typeof this.password !== 'string') {
+      return next(new Error('Password is required and must be a string'));
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    console.error('Password hashing error:', error);
+    next(error);
+  }
 });
 
 // Instance Method: Compare entered password with the hashed password
@@ -114,9 +124,18 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 // Instance Method: Generate default avatar if none is provided
 userSchema.pre('save', function (next) {
-    if (this.isNew && !this.avatar) {
-        const formattedName = this.name.split(' ').join('+');
-        this.avatar = `https://ui-avatars.com/api/?name=${formattedName}&background=random&color=fff`;
+    try {
+        if (this.isNew && !this.avatar && this.name) {
+            // Safely format name for URL
+            const formattedName = encodeURIComponent(this.name.trim() || 'User');
+            this.avatar = `https://ui-avatars.com/api/?name=${formattedName}&background=random&color=fff`;
+        }
+    } catch (error) {
+        // If avatar generation fails, use a default or empty string
+        console.warn('Avatar generation failed:', error.message);
+        if (!this.avatar) {
+            this.avatar = `https://ui-avatars.com/api/?name=User&background=random&color=fff`;
+        }
     }
     next();
 });
