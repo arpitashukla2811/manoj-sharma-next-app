@@ -96,24 +96,23 @@ userSchema.index({ role: 1 });
 userSchema.index({ isActive: 1 });
 
 // Middleware: Hash password before saving the user document 🔑
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
+  // Only hash the password if it has been modified (or is new)
+  if (!this.isModified('password')) {
+    return;
+  }
+
+  // Ensure password exists and is a string
+  if (!this.password || typeof this.password !== 'string') {
+    throw new Error('Password is required and must be a string');
+  }
+
   try {
-    // Only hash the password if it has been modified (or is new)
-    if (!this.isModified('password')) {
-      return next();
-    }
-
-    // Ensure password exists and is a string
-    if (!this.password || typeof this.password !== 'string') {
-      return next(new Error('Password is required and must be a string'));
-    }
-
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
   } catch (error) {
     console.error('Password hashing error:', error);
-    next(error);
+    throw error;
   }
 });
 
