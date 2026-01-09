@@ -132,12 +132,14 @@ export const registerUser = async (req, res) => {
       });
     }
     
-    // Generic error response
+    // Generic error response - always show error details for debugging
     res.status(500).json({ 
       success: false,
       message: 'Server error. Please try again later.',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
-      errorType: error.name || 'UnknownError'
+      error: error.message || 'Unknown error',
+      errorType: error.name || 'UnknownError',
+      // Include stack in development
+      ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
     });
   }
 };

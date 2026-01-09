@@ -122,7 +122,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // Instance Method: Generate default avatar if none is provided
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function () {
     try {
         if (this.isNew && !this.avatar && this.name) {
             // Safely format name for URL
@@ -136,7 +136,6 @@ userSchema.pre('save', function (next) {
             this.avatar = `https://ui-avatars.com/api/?name=User&background=random&color=fff`;
         }
     }
-    next();
 });
 
 // Instance Method: Increment login attempts
