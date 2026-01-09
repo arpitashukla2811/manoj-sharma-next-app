@@ -20,9 +20,16 @@ const generateToken = (id) => {
 
 export const registerUser = async (req, res) => {
   try {
+    console.log('Registration request received:', {
+      body: { ...req.body, password: req.body.password ? '***' : undefined },
+      headers: req.headers,
+      timestamp: new Date().toISOString()
+    });
+
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
+      console.log('Validation failed: Missing required fields');
       return res.status(400).json({ 
         success: false,
         message: 'Please provide all required fields.' 
@@ -32,9 +39,26 @@ export const registerUser = async (req, res) => {
     // Normalize email to lowercase
     const normalizedEmail = email.toLowerCase().trim();
 
+    // Check database connection (0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting)
+    try {
+      const dbState = User.db?.readyState ?? 0;
+      if (dbState !== 1) {
+        console.error('Database not connected. ReadyState:', dbState);
+        return res.status(503).json({ 
+          success: false,
+          message: 'Database connection unavailable. Please try again later.' 
+        });
+      }
+    } catch (dbCheckError) {
+      console.error('Database connection check failed:', dbCheckError.message);
+      // Continue anyway, let mongoose handle the error
+    }
+
     // Check if user already exists using the User model
+    console.log('Checking if user exists:', normalizedEmail);
     const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
+      console.log('User already exists:', normalizedEmail);
       return res.status(400).json({ 
         success: false,
         message: 'User with this email already exists.' 
@@ -42,6 +66,7 @@ export const registerUser = async (req, res) => {
     }
     
     // Create new user. Password hashing is handled by the model's 'pre-save' hook.
+    console.log('Creating new user:', normalizedEmail);
     const user = await User.create({
       name: name.trim(),
       email: normalizedEmail,
@@ -49,6 +74,8 @@ export const registerUser = async (req, res) => {
     });
 
     if (user) {
+      console.log('User created successfully:', user._id);
+      const token = generateToken(user._id);
       res.status(201).json({
         success: true,
         message: 'User registered successfully.',
@@ -57,39 +84,60 @@ export const registerUser = async (req, res) => {
           name: user.name,
           email: user.email,
         },
-        token: generateToken(user._id),
+        token: token,
       });
     } else {
-        res.status(400).json({ 
-          success: false,
-          message: 'Invalid user data.' 
-        });
+      console.error('User creation returned null/undefined');
+      res.status(400).json({ 
+        success: false,
+        message: 'Invalid user data.' 
+      });
     }
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Registration error - Full details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code,
+      stack: error.stack,
+      errors: error.errors
+    });
     
     // Handle MongoDB duplicate key error
     if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern || {})[0] || 'email';
+      console.log('Duplicate key error on field:', field);
       return res.status(400).json({ 
         success: false,
-        message: 'User with this email already exists.' 
+        message: `User with this ${field} already exists.` 
       });
     }
     
     // Handle validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
+      console.log('Validation errors:', errors);
       return res.status(400).json({ 
         success: false,
         message: 'Validation error',
         errors 
       });
     }
+
+    // Handle MongoDB connection errors
+    if (error.name === 'MongoServerError' || error.name === 'MongooseError') {
+      console.error('MongoDB error:', error.message);
+      return res.status(503).json({ 
+        success: false,
+        message: 'Database error. Please try again later.' 
+      });
+    }
     
+    // Generic error response
     res.status(500).json({ 
       success: false,
       message: 'Server error. Please try again later.',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      errorType: error.name || 'UnknownError'
     });
   }
 };
