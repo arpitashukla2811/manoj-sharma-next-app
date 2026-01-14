@@ -71,9 +71,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (formData) => {
+  const register = async (name, email, password, confirmPassword ) => {
     try {
-      const response = await authAPI.register(formData);
+      const response = await authAPI.register({ name, email, password, confirmPassword });
       
       if (response.data.success) {
         const { user, token } = response.data;
