@@ -117,23 +117,13 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // Instance Method: Generate default avatar if none is provided
-userSchema.pre('save', function (next) {
-    try {
-        if (this.isNew && !this.avatar && this.name) {
-            // Safely format name for URL
-            const formattedName = encodeURIComponent(this.name.trim() || 'User');
-            this.avatar = `https://ui-avatars.com/api/?name=${formattedName}&background=random&color=fff`;
-        }
-        return next();
-    } catch (error) {
-        // If avatar generation fails, use a default or empty string
-        console.warn('Avatar generation failed:', error.message);
-        if (!this.avatar) {
-            this.avatar = `https://ui-avatars.com/api/?name=User&background=random&color=fff`;
-        }
-        return next(); // Continue even if avatar generation fails
-    }
+userSchema.pre('save', function () {
+  if (this.isNew && !this.avatar && this.name) {
+    const formattedName = encodeURIComponent(this.name.trim() || 'User');
+    this.avatar = `https://ui-avatars.com/api/?name=${formattedName}&background=random&color=fff`;
+  }
 });
+
 
 // Instance Method: Increment login attempts
 userSchema.methods.incLoginAttempts = function() {
