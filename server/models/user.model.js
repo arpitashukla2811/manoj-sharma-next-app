@@ -96,19 +96,13 @@ userSchema.index({ role: 1 });
 userSchema.index({ isActive: 1 });
 
 // Middleware: Hash password before saving the user document 🔑
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
   if (!this.isModified('password')) {
-    return next();
+    return;
   }
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    console.error('Password hashing error:', error);
-    next(error);
-  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 // Instance Method: Compare entered password with the hashed password
