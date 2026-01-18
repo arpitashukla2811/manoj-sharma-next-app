@@ -51,7 +51,8 @@ export default function RegisterPage() {
     }
 
     try {
-      const result = await register(formData.name, formData.email, formData.password , formData.confirmPassword);
+      console.log('Sending registration data:', formData);
+      const result = await register(formData);
       if (result.success) {
         toast.success('Registration successful! Please log in.');
         setTimeout(() => router.push('/auth/login'), 1200);

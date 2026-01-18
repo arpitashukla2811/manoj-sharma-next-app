@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     // Check if user is logged in on app load
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
-    
+
     if (token && savedUser) {
       setUser(JSON.parse(savedUser));
       // Verify token is still valid
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authAPI.login({ email, password });
-      
+
       if (response.data.success) {
         const { user, token } = response.data;
         setUser(user);
@@ -64,17 +64,17 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: response.data.message || 'Login failed' };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Login failed' 
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Login failed'
       };
     }
   };
 
-  const register = async (name, email, password, confirmPassword ) => {
+  const register = async (userData) => {
     try {
-      const response = await authAPI.register({ name, email, password, confirmPassword });
-      
+      const response = await authAPI.register(userData);
+
       if (response.data.success) {
         const { user, token } = response.data;
         setUser(user);
@@ -85,9 +85,9 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: response.data.message || 'Registration failed' };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Registration failed' 
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Registration failed'
       };
     }
   };
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (profileData) => {
     try {
       const response = await authAPI.updateProfile(profileData);
-      
+
       if (response.data.success) {
         const updatedUser = response.data.user;
         setUser(updatedUser);
@@ -111,9 +111,9 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: response.data.message || 'Profile update failed' };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Profile update failed' 
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Profile update failed'
       };
     }
   };
@@ -121,16 +121,16 @@ export const AuthProvider = ({ children }) => {
   const changePassword = async (currentPassword, newPassword) => {
     try {
       const response = await authAPI.changePassword({ currentPassword, newPassword });
-      
+
       if (response.data.success) {
         return { success: true };
       } else {
         return { success: false, error: response.data.message || 'Password change failed' };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Password change failed' 
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Password change failed'
       };
     }
   };

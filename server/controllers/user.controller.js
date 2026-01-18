@@ -19,15 +19,22 @@ const generateToken = (id) => {
  */
 
 export const registerUser = async (req, res) => {
-  console.log('User controller loaded' , req.body); 
+  console.log('User controller loaded', req.body);
   try {
     const { name, email, password, confirmPassword } = req.body;
 
     // ✅ Validate required fields
-    if (!name || !email || !password || !confirmPassword) {
+    // ✅ Validate required fields
+    const missingFields = [];
+    if (!name) missingFields.push('name');
+    if (!email) missingFields.push('email');
+    if (!password) missingFields.push('password');
+    if (!confirmPassword) missingFields.push('confirmPassword');
+
+    if (missingFields.length > 0) {
       return res.status(400).json({
         success: false,
-        message: 'All fields are required',
+        message: `All fields are required. Missing: ${missingFields.join(', ')}`,
       });
     }
 
@@ -151,9 +158,9 @@ export const getUserProfile = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
-    
+
     let query = {};
-    
+
     // Search functionality
     if (search) {
       query.$or = [
@@ -162,21 +169,21 @@ export const getUsers = async (req, res) => {
         { phone: { $regex: search, $options: 'i' } }
       ];
     }
-    
+
     const skip = (Number(page) - 1) * Number(limit);
-    
+
     const users = await User.find(query)
       .select('-password -emailVerificationToken -emailVerificationExpires -passwordResetToken -passwordResetExpires')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(Number(limit));
-    
+
     const total = await User.countDocuments(query);
     const totalPages = Math.ceil(total / Number(limit));
-    
-    res.json({ 
+
+    res.json({
       success: true,
-      data: users, 
+      data: users,
       pagination: {
         currentPage: Number(page),
         totalPages,
@@ -200,11 +207,11 @@ export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
       .select('-password -emailVerificationToken -emailVerificationExpires -passwordResetToken -passwordResetExpires');
-    
+
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found.' });
     }
-    
+
     res.json({ success: true, data: user });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error', error: error.message });
