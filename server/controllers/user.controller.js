@@ -21,28 +21,18 @@ const generateToken = (id) => {
 export const registerUser = async (req, res) => {
   console.log('User controller loaded', req.body);
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password } = req.body;
 
-    // ✅ Validate required fields
     // ✅ Validate required fields
     const missingFields = [];
     if (!name) missingFields.push('name');
     if (!email) missingFields.push('email');
     if (!password) missingFields.push('password');
-    if (!confirmPassword) missingFields.push('confirmPassword');
 
     if (missingFields.length > 0) {
       return res.status(400).json({
         success: false,
         message: `All fields are required. Missing: ${missingFields.join(', ')}`,
-      });
-    }
-
-    // ✅ Confirm password check
-    if (password !== confirmPassword) {
-      return res.status(400).json({
-        success: false,
-        message: 'Passwords do not match',
       });
     }
 

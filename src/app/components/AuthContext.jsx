@@ -73,7 +73,9 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await authAPI.register(userData);
+      // Remove confirmPassword before sending to backend
+      const { confirmPassword, ...registrationData } = userData;
+      const response = await authAPI.register(registrationData);
 
       if (response.data.success) {
         const { user, token } = response.data;
