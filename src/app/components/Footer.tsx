@@ -1,15 +1,15 @@
 'use client'
 import { motion } from 'framer-motion';
-import { FiInstagram, FiTwitter, FiFacebook, FiLinkedin, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
+import { FiInstagram, FiTwitter, FiFacebook, FiMail, FiPhone, FiMapPin, FiYoutube, FiX } from 'react-icons/fi';
 import Link from "next/link"
 import React from "react"
 
 const Footer = () => {
     const socialLinks = [
-        { icon: FiInstagram, href: "#", label: "Instagram" },
-        { icon: FiTwitter, href: "#", label: "Twitter" },
+        { icon: FiInstagram, href: "https://www.instagram.com/mirrrofilmsofficial?igsh=MTh0MGxmNmdvN2lraw==", label: "Instagram" },
+        { icon: FiX, href: "#", label: "X" },
         { icon: FiFacebook, href: "#", label: "Facebook" },
-        { icon: FiLinkedin, href: "#", label: "LinkedIn" },
+        { icon: FiYoutube, href: "https://youtube.com/@mirrrofilms?si=8LTtxHflCJXQZBF8", label: "Youtube" },
     ];
 
     return (
