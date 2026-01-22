@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
   },
+  turbopack: {},
   // Optimize CSS loading to reduce preload warnings
   webpack: (config, { dev }) => {
     if (!dev) {

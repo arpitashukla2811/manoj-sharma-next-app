@@ -1,16 +1,34 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FiImage, FiVideo, FiPlay } from 'react-icons/fi';
+import Lightbox from '../components/Lightbox';
 
 const GalleryPage = () => {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Generate 33 gallery items dynamically
+  const galleryItems = Array.from({ length: 33 }, (_, i) => ({
+    type: 'image' as const,
+    title: `Gallery Image ${i + 1}`,
+    description: '',
+    src: `/images/gallery/gallery-${i + 1}.jpeg`, // Assuming logic from rename script
+    alt: `Gallery Image ${i + 1}`
+  }));
+
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.1
       }
     }
   };
@@ -25,53 +43,6 @@ const GalleryPage = () => {
       }
     }
   };
-
-  const galleryItems = [
-    {
-      type: 'image',
-      title: 'Book Launch Event',
-      description: 'The grand launch of "Me No Pause, Me Play"',
-      src: '/images/gallery/book-launch.jpg',
-      alt: 'Book Launch Event'
-    },
-    {
-      type: 'video',
-      title: 'Author Interview',
-      description: 'Exclusive interview with Manoj Kumar Sharma',
-      src: '/videos/author-interview.mp4',
-      thumbnail: '/images/gallery/interview-thumb.jpg',
-      alt: 'Author Interview'
-    },
-    {
-      type: 'image',
-      title: 'Novel Reading',
-      description: 'Live Novel reading session',
-      src: '/images/gallery/author-reading.jpg',
-      alt: 'Author Reading'
-    },
-    {
-      type: 'video',
-      title: 'Book Signing',
-      description: 'Meet and greet with readers',
-      src: '/videos/book-signing.mp4',
-      thumbnail: '/images/gallery/signing-thumb.jpg',
-      alt: 'Book Signing'
-    },
-    {
-      type: 'image',
-      title: 'Literary Festival',
-      description: 'Participation in International Literary Festival',
-      src: '/images/gallery/literary-fest.jpg',
-      alt: 'Literary Festival'
-    },
-    {
-      type: 'image',
-      title: 'Award Ceremony',
-      description: 'Receiving the prestigious literary award',
-      src: '/images/gallery/award-ceremony.jpg',
-      alt: 'Award Ceremony'
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-[var(--background-light)]">
@@ -122,75 +93,44 @@ const GalleryPage = () => {
                   y: -10,
                   transition: { duration: 0.3 }
                 }}
-                className="group relative overflow-hidden rounded-xl shadow-lg bg-white"
+                className="group relative overflow-hidden rounded-xl shadow-lg bg-white cursor-pointer"
+                onClick={() => openLightbox(index)}
               >
                 <div className="aspect-video relative overflow-hidden">
-                  {item.type === 'image' ? (
-                    <div className="relative w-full h-full">
-                      <Image
-                        src={item.src}
-                        alt={item.alt}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          // Fallback to placeholder if image doesn't exist
-                          e.currentTarget.style.display = 'none';
-                          if (e.currentTarget.nextElementSibling) {
-                            (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex';
-                          }
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-br from-[var(--saffron-light)] to-[var(--saffron-primary)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <FiImage className="w-12 h-12 text-white" />
-                      </div>
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        // Try .jpg if .jpeg fails - primitive fallback logic
+                        const target = e.currentTarget as HTMLImageElement;
+                        if (target.src.endsWith('.jpeg')) {
+                          target.src = target.src.replace('.jpeg', '.jpg');
+                        }
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <FiImage className="text-white w-10 h-10 drop-shadow-lg" />
                     </div>
-                  ) : (
-                    <div className="relative w-full h-full">
-                      <Image
-                        src={item.thumbnail || item.src}
-                        alt={item.alt}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          // Fallback to placeholder if image doesn't exist
-                          e.currentTarget.style.display = 'none';
-                          if (e.currentTarget.nextElementSibling) {
-                            (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex';
-                          }
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-br from-[var(--saffron-light)] to-[var(--saffron-primary)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <FiPlay className="w-12 h-12 text-white" />
-                      </div>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="bg-black/50 rounded-full p-3">
-                          <FiPlay className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {/* Fallback placeholder */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[var(--saffron-light)] to-[var(--saffron-primary)] flex items-center justify-center hidden">
-                    {item.type === 'image' ? (
-                      <FiImage className="w-16 h-16 text-white" />
-                    ) : (
-                      <FiVideo className="w-16 h-16 text-white" />
-                    )}
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2 group-hover:text-[var(--saffron-primary)] transition-colors duration-300">
-                    {item.title}
-                  </h3>
-                  <p className="text-[var(--text-secondary)]">
-                    {item.description}
-                  </p>
                 </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </motion.section>
+
+      <Lightbox
+        images={galleryItems}
+        currentIndex={currentImageIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onNext={() => setCurrentImageIndex((prev) => (prev + 1) % galleryItems.length)}
+        onPrev={() => setCurrentImageIndex((prev) => (prev - 1 + galleryItems.length) % galleryItems.length)}
+      />
     </div>
   );
 };
